@@ -1,0 +1,6 @@
+
+
+>rosrun cnc_marker manager.py
+>rosrun cnc_marker GcodeGenerator
+>rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f ~/catkin_ws/src/cnc_marker/src/grbl.gcode
+

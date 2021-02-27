@@ -1,0 +1,8 @@
+prefix=/home/toby001/catkin_ws/src/cnc_marker/build/devel
+
+Name: cnc_marker
+Description: Description of cnc_marker
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

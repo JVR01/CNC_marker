@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/toby001/catkin_ws/src/cnc_marker/build/devel/setup.sh
