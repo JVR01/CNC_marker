@@ -16,16 +16,9 @@ args = parser.parse_args()
 print ("USB Port: %s" % args.port )
 print ("Gcode file: %s" % args.file )
 #Example--> ./gCodeSender.py -p /dev/ttyACM0 -f ./grbl.gcode
-
-# Open grbl serial port ==> CHANGE THIS BELOW TO MATCH YOUR USB LOCATION
+#>>reset_arduino()
+#>>time.sleep(2) 
 s = serial.Serial(args.port,115200)
-#-----s = serial.Serial('/dev/ttyUSB0',115200) # GRBL operates at 115200 baud. Leave that part alone.
-
-# Open g-code file
-f = open(args.file,'r')
-#f = open('grbl.gcode','r')
-
-
 spaces = "\r\n\r\n" 
 # Wake up grbl
 s.write(spaces.encode())
@@ -34,18 +27,48 @@ time.sleep(2)   # Wait for grbl to initialize
 s.flushInput()  # Flush startup text in serial input
 
 
-# Stream g-code to grbl
-for line in f:
-  l = line.strip() # Strip all EOL characters for consistency
-  print ('Sending: ' + l)
-  s.write((l + '\n').encode()) # Send g-code block to grbl
-  grbl_out = s.readline() # Wait for grbl response with carriage return
-  #--print (' : ' + grbl_out.strip()) 
-  print (' : ' + grbl_out.strip().decode()) 
+def callback(data):
+  rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
 
-# Wait here until grbl is finished to close serial port and file.
-input("  Press <Enter> to exit and disable grbl.")
+  if data.data == 'gcode_ready': #gcode_ready
 
-# Close file and serial port
-f.close()
-s.close()
+      f = open(args.file,'r') # Open g-code file
+      #f = open('grbl.gcode','r')
+
+      # Stream g-code to grbl
+      for line in f:
+          l = line.strip() # Strip all EOL characters for consistency
+          print ('Sending: ' + l)
+          s.write((l + '\n').encode()) # Send g-code block to grbl
+          grbl_out = s.readline() # Wait for grbl response with carriage return
+          #--print (' : ' + grbl_out.strip()) 
+          print (' : ' + grbl_out.strip().decode()) 
+
+      # Wait here until grbl is finished to close serial port and file.
+      #--input("  Press <Enter> to exit and disable grbl.")
+      
+      # Close file and serial port
+      f.close()
+      #s.close()
+      reset_arduino()
+      print ('### Gcode_Program sent ### ')
+      rospy.loginfo("### Gcode_Program sent ### ")
+      time.sleep(1)
+  else:
+      print ('Nothing to do yet :( ')
+
+
+def listener():
+
+    rospy.init_node('gCodeSender', anonymous=True)
+
+    rospy.Subscriber("gcode_status", String, callback)
+
+    # spin() simply keeps python from exiting until this node is stopped
+    rospy.spin()
+    
+def reset_arduino():
+    pass
+
+if __name__ == '__main__':
+    listener()
