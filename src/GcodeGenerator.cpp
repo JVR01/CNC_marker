@@ -20,30 +20,30 @@ char valid_chars[] = { 'A', 'B', 'C'  }; //'\0'
  * This tutorial demonstrates simple sending of messages over the ROS system.
  */
 //void pubstatus(){}
-bool input_valid(std::string message)
+bool input_valid(std::string const &message)
 {
-  bool valid = false;
-
+  bool valid = true;
+  std::string Message = message;
+  
+  int sizeOfArray = sizeof(valid_chars) / sizeof(valid_chars[0]);
+  
+  std::string validcharacters(valid_chars);
+  for ( std::string::iterator it=Message.begin(); it!=Message.end(); ++it)
+  {
+     //std::cout << *it;
+     //ROS_INFO("%s\n", message.c_str());
+     std::string character; 
+     character += *it;
+     bool on_thelist = false;
+     if( validcharacters.find(character) != std::string::npos )
+       {on_thelist = true;}
+     else
+       {on_thelist= false;valid=false;} 
+  }
    //s1.find(s2) != std::string::npos
    //if( (message.find("C") != std::string::npos) | ( message.find("D")!= std::string::npos)  ){valid = true;}
-
-
-  int sizeOfArray = sizeof(valid_chars) / sizeof(valid_chars[0]);
-  for (int i = 0; i < sizeOfArray; i++)
-  {
-
-    //std::stringstream ss;
-    //ss << "working " << i;
-    //std::string nix = ;
-    std::string ss(1, valid_chars[i]);
-    //ROS_INFO("%s\n", message.c_str());
-    if( (message.find(valid_chars[i]) != std::string::npos)  ){valid = true;}
-    ROS_INFO("%s", ss.c_str());
-    
-    //ROS_INFO("%s", ss.str().c_str()); //status.data.c_str()
-  }
-
-
+  
+  ROS_INFO("%s", message.c_str());
   return valid; 
 }
 
@@ -61,7 +61,7 @@ void pubstatus(std::string msg_str)
   //loop_rate.sleep();
 }
 
-void generate_code(std::string message)
+void generate_code(std::string const & message)
 {
   for (int i = 0; i <= 100; i++)
   {
@@ -70,8 +70,9 @@ void generate_code(std::string message)
     ss << "working " << i;
     //std::string words =  "working "+ i;
     ROS_INFO("%s", ss.str().c_str()); //status.data.c_str()
-    fs << "Test number: " << ss.str() << std::endl;
   }
+  //fs << "Test number: " << ss.str() << std::endl;
+  fs << "Test number: " << message << std::endl;
   std::string  msg = "gcode_ready";
   pubstatus(msg);
 
@@ -81,6 +82,7 @@ void chatterCallback(const std_msgs::String::ConstPtr &msg)
 {
   ++count;
   ROS_INFO("GcodeGenerator heard: [%s]", msg->data.c_str());
+  
 
   std::string message = msg->data;
   if (input_valid(message))
@@ -91,6 +93,7 @@ void chatterCallback(const std_msgs::String::ConstPtr &msg)
   {
     pubstatus("wrong input");
   }
+  ros::Duration(5.0).sleep();
 }
 
 

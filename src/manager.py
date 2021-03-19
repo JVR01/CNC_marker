@@ -78,7 +78,7 @@ def keyboard_thread(x):
     global keyboard_input
     global enable_keyboard_input
     if x.is_alive() is True:
-       rospy.loginfo("EStaaa vivo!!")
+       rospy.loginfo("Thread active and listening")
               #x.join()
     else:  
        enable_keyboard_input = True 
@@ -95,7 +95,7 @@ def keyboard_thread(x):
            rospy.loginfo("finissshhhhh line!!")
            #enable_keyboard_input = True
        except:
-           print ("Error: unable to start thread")    
+           print ("Error: unable to start thread again")    
     return x
     
     
@@ -107,15 +107,13 @@ if __name__ == '__main__':
         x = threading.Thread(target=get_keyboard_input, args=(1,))
         
         while not rospy.is_shutdown():
-           talker()
-           rospy.loginfo("while")
+           talker() #publishes status topic
+           rospy.loginfo("loop in the while")
            rospy.loginfo(keyboard_input)
 
            x = keyboard_thread(x)
            rate.sleep()
-           '''
-           here was the thread zeug
-           '''        
+                 
            #rospy.spin()
     except rospy.ROSInterruptException:
         pass

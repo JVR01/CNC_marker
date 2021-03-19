@@ -1,6 +1,20 @@
 
 
 >rosrun cnc_marker manager.py
+
+-This one executes a thread in background that awaits for a keyboard input. When entered a valid word, it publisches the text under "/keyboard"
+
+-It also hears incomming message through  "/manager_listener std_msgs/String"
+-the /status topics says nothing 
+
+
 >rosrun cnc_marker GcodeGenerator
+
+-this one hears and waits for "/keyboard" topic. 
+- If the message is valid "input_valid(std::string message)", it executes the function: "generate_code(message)"
+
+
+
+
 >rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f ~/catkin_ws/src/cnc_marker/src/grbl.gcode
 
