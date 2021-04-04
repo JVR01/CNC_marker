@@ -25,11 +25,14 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-
+set( project_sources
+   src/lib/text_parser/csv_row.cpp
+   src/lib/text_parser/gcode_parser.cpp
+)
 #include_directories(${roscpp_INCLUDE_DIRS})
 #include_directories(${std_msgs_INCLUDE_DIRS})
 
-add_executable(GcodeGenerator src/GcodeGenerator.cpp)
+add_executable(GcodeGenerator src/GcodeGenerator.cpp ${project_sources})
 target_link_libraries(GcodeGenerator ${roscpp_LIBRARIES} ${std_msgs_LIBRARIES})
 
 add_executable(listenercpp src/listenercpp.cpp)

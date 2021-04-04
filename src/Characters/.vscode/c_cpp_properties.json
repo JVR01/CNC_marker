@@ -1,0 +1,21 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/opt/ros/noetic/include/**",
+        "/home/toby001/catkin_ws/devel/include/**",
+        "/home/toby001/catkin_ws/src/cnc_marker/include/**",
+        "/home/toby001/catkin_ws/src/jvr_robotteer_arm/include/**",
+        "/home/toby001/catkin_ws/src/rosserial/rosserial_server/include/**",
+        "/home/toby001/catkin_ws/src/rosserial/rosserial_test/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}

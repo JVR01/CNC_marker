@@ -4,6 +4,9 @@
 #include <fstream>
 #include "lib/rapidxml-1.13/rapidxml.hpp"
 
+//#include "src/lib/text_parser/csv_row.h"
+#include "lib/text_parser/csv_row.h"
+#include "lib/text_parser/gcode_parser.h"
 
 //#include <iostream>
 //using namespace std;
@@ -14,6 +17,10 @@ std_msgs::String status;
 std::ofstream fs("src/cnc_marker/src/GcodeText.txt"); //writes out the results
 char valid_chars[] = { 'A', 'B', 'C'  }; //'\0'
 
+
+CSVRow roww;
+std::string path = "/src/cnc_marker/src/Characters";
+GcodeParser GCode(path);
 //myfile.close();
 
 /**
@@ -93,7 +100,7 @@ void chatterCallback(const std_msgs::String::ConstPtr &msg)
   {
     pubstatus("wrong input");
   }
-  ros::Duration(5.0).sleep();
+  ros::Duration(1.0).sleep();
 }
 
 

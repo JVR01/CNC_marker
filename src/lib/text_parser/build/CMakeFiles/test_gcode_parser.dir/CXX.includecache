@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/gcode_parser.cpp
+gcode_parser.h
+/home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/gcode_parser.h
+
+/home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/gcode_parser.h
+iterator
+-
+iostream
+-
+fstream
+-
+sstream
+-
+vector
+-
+string
+-
+
+/home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/main.cpp
+iostream
+-
+gcode_parser.h
+/home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/gcode_parser.h
+
