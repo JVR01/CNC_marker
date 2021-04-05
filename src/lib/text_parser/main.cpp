@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-    std::string path_ngc = "../../../Characters/" ; //"ls ../../../Characters/" ;
+    std::string path_ngc = "../../../Characters/" ; //define Characters source
     //std::ofstream output_file("./OutputFile.txt"); //writes out the results
     GcodeParser GCode(path_ngc);
     //CSVRow row;
@@ -28,7 +28,7 @@ int main()
     U = GCode.add_character(";");
     U = GCode.add_character("B");
     U = GCode.add_character("C");
-    
+
     U = GCode.add_phrase("moquiAto");
     /*GCode.add_transition_code();
     U = GCode.add_character("B");

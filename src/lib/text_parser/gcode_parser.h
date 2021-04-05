@@ -23,8 +23,13 @@ class GcodeParser
 {
     public:
     
-        GcodeParser(std::string const &path);
+        GcodeParser(std::string const &path, std::string const & OutPath);
         
+        std::string getCharPath()//std::string_view operator[](std::size_t index) const
+        {
+            return folder_path;
+        }
+
         std::string operator[](std::size_t index) const //std::string_view operator[](std::size_t index) const
         {
             return std::string(&m_line[m_data[index] + 1], m_data[index + 1] -  (m_data[index] + 1)); //return std::string_view(
@@ -70,25 +75,36 @@ class GcodeParser
               special_char = true;
               std::cout << "++++++++Special character ++++++++++" << std::endl;
           }
-
+#if  ROS_MELODIC
+ROS_INFO("%s", "hallooooooooooooo");
+#endif
             
           try {
                 std::string char_path = folder_path + character_str + ".ngc";
                 std::ifstream text_file(char_path.c_str());
- 
                 int number_of_lines = 0;
                 if (text_file.is_open()) {
                         std::string line;
+                    
                         while (std::getline(text_file, line)) {
                             number_of_lines++;
-                            output_file << line << std::endl;
-                            std::cout << line << std::endl;
+
+                            if (output_file.is_open()) 
+                            {
+                              output_file << line << std::endl;
+                              std::cout << line << std::endl;
+                            }
+                            else{result = 1001;}
+                            
                         }
                         output_file << "" << std::endl;
                         text_file.close();
                         //-->std::cout <<"Number of lines Found: "<< number_of_lines << std::endl;
                 }
-                else{throw (character_str);}
+                else
+                {
+                    throw (character_str);
+                }
             } catch (const std::overflow_error& e) {
                 // this executes if f() throws std::overflow_error (same type rule)
                 std::cout <<"overflow_error " << std::endl;
@@ -114,20 +130,23 @@ class GcodeParser
             int result = 0;
             std::string str = phrase;//("Test string");
 
-            for ( std::string::iterator it=str.begin(); it!=str.end(); ++it)
+            /*for ( std::string::iterator it=str.begin(); it!=str.end(); ++it)
             {
                std::cout << *it <<"--";
               
             }
             
-            std::cout << '\n';
+            std::cout << '\n';*/
 
             for (std::string::size_type i = 0; i < str.size(); i++) {
                 std::cout << str[i] << ' ';  
                 std::string s(1, str[i]);
                 result += add_character(s); // if faulty returns a 0
+                if(i <  str.size()-1 ){add_transition_code();}
             }
+            add_end_code();
             std::cout <<"faulty Characters -> "<< result <<" / "<< str.size() << std::endl;
+
             return result;
         }
 
@@ -157,7 +176,7 @@ class GcodeParser
           output_file << "$X" << std::endl;
           output_file << "$G" << std::endl;
           output_file << "$X" << std::endl;
-          output_file << "$H" << std::endl;  
+           
           //output_file << "%" << std::endl;
           output_file << "M3" << std::endl;
           output_file << "G21 (All units in mm)" << std::endl;
@@ -165,6 +184,7 @@ class GcodeParser
           output_file << "G1 F500" << std::endl;
           output_file << "M5 S120" << std::endl;
           output_file << "M3" << std::endl;
+          output_file << "$H" << std::endl; 
           output_file << "" << std::endl;
         }
         

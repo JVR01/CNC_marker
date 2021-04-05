@@ -9,6 +9,8 @@
 #include "lib/text_parser/gcode_parser.h"
 
 //#include <iostream>
+#include "lib/text_parser/gcode_parser.h"
+
 //using namespace std;
 
 ros::Publisher chatter_pub;
@@ -19,8 +21,12 @@ char valid_chars[] = { 'A', 'B', 'C'  }; //'\0'
 
 
 CSVRow roww;
-std::string path = "/src/cnc_marker/src/Characters";
-GcodeParser GCode(path);
+//--std::string path = "/src/cnc_marker/src/Characters";
+
+std::string path =     "/home/toby001/catkin_ws/src/cnc_marker/src/Characters/";
+std::string Out_Path = "/home/toby001/catkin_ws/src/cnc_marker/";//   /home/toby001/catkin_ws/src/cnc_marker
+
+
 //myfile.close();
 
 /**
@@ -70,6 +76,22 @@ void pubstatus(std::string msg_str)
 
 void generate_code(std::string const & message)
 {
+  GcodeParser GCode(path, Out_Path);
+  GCode.add_start_code();
+  //int U = GCode.add_character("A");
+  //U = GCode.add_character(" ");
+  //U = GCode.add_character(";");
+  //U = GCode.add_character("B");
+  //U = GCode.add_character("C");
+  int U = GCode.add_phrase(message);
+  //U = GCode.add_phrase("moquito");
+  //GCode.add_end_code();
+
+
+  fs << "result U: " << U << std::endl;
+  fs << "char_Path:" << GCode.getCharPath()<< std::endl;
+  
+
   for (int i = 0; i <= 100; i++)
   {
 

@@ -11,10 +11,13 @@
 #include "gcode_parser.h"
 
 
-GcodeParser::GcodeParser(std::string const & path)
+GcodeParser::GcodeParser(std::string const & path, std::string const & OutPath)
 {
    folder_path = path;
-   output_file = std::ofstream("./OutputFile.ngc");
+
+   //output_file = std::ofstream("./OutputFile.ngc");
+   std::string Opath = OutPath + ("OutputFile.ngc");
+   output_file = std::ofstream(Opath);
 }
 
 
