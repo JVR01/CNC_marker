@@ -1,0 +1,37 @@
+
+<launch>
+
+  <!--include file="$(find jvr_robotter_arm_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="true"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+    <arg name="pipeline" value="$(arg pipeline)"/>
+  </include-->
+  
+
+   <!-- remap applies to all future statements in this scope. -->
+    <!--remap from="chatter" to="hello"/-->
+
+
+    <!--node pkg="cnc_marker" type="GcodeGenerator" name="GcodeGenerator" args="" />
+    <node pkg="cnc_marker" type="manager.py" name="manager.py" /-->
+    <!--arg name="-p"  default="/dev/ttyUSB0" /-->
+    <!--arg name="-f"  default="/home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc" /-->
+
+    <!--node pkg="cnc_marker" type="gCodeSender.py" name="gCodeSender.py" args="-p /dev/ttyUSB0" args="-f /home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc" /-->
+    <!--node pkg="cnc_marker" type="gCodeSender.py" name="gCodeSender.py" args="$(arg -p) $(arg -f)"-->
+      <!--param name="-p" type="string" value="/dev/ttyUSB0" />
+      <param name="-f" type="string" value="/home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc" /-->
+    <!--/node-->
+    <!--args="$(arg a) $(arg b)" -->
+    <node pkg="cnc_marker" type="gCodeSender.py" name="gCodeSender.py" output="screen" />
+    
+
+    <!--node pkg="rospy_tutorials" type="talker" name="talker"-->
+      
+      
+      <!--remap from="chatter" to="hello-1"/-->
+      
+    <!--/node-->
+</launch>

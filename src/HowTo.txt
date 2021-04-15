@@ -18,3 +18,4 @@
 
 >rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f ~/catkin_ws/src/cnc_marker/src/grbl.gcode
 
+>rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f /home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc

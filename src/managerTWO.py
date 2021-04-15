@@ -8,10 +8,12 @@ import threading
 import sys
 
 import os  #sys.exit(1)
-from pynput.keyboard import Key, Controller
+
 
 from std_msgs.msg import String
 #import curses
+
+
 from rospy import init_node, is_shutdown
 
 Flag = True
@@ -45,7 +47,7 @@ class MyThread(threading.Thread):
 
 keyboard_input = "awesome"
 enable_keyboard_input = True
-
+from pynput.keyboard import Key, Controller
 def myhook():
   rospy.loginfo("shutdown time!")  
   #print "shutdown time!"
@@ -68,21 +70,20 @@ def myhook():
     #threading.Thread._block
   #t1.stop()
   keyboard = Controller()
-  keyboard.press('E')
-  keyboard.press('n')
-  keyboard.press('d')
-  
-  keyboard.press(Key.enter)
-  keyboard.release(Key.enter)
-  keyboard.press('ZZZ')
+  keyboard.press('a')
+  keyboard.press('a')
+  keyboard.press('b')
+  sys.exit()
+  #keyboard.press(Key.enter)
+  #keyboard.press('ZZZ')
   #keyboard.press(Key.enter)
   #Key.enter
+  
   os.system("\r\n") 
-  sys.exit()
+  
   sys.exit(1)
 
 rospy.on_shutdown(myhook)
-#https://nitratine.net/blog/post/simulate-keypresses-in-python/
 
 def callback(data):
     rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)

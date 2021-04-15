@@ -1,0 +1,21 @@
+
+<launch>
+    <node pkg="cnc_marker" type="GcodeGenerator" name="GcodeGenerator" args="" />
+    <node pkg="cnc_marker" type="manager.py" name="manager" />
+    <!--arg name="-p"  default="/dev/ttyUSB0" /-->
+    <!--arg name="-f"  default="/home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc" /-->
+
+    <!--node pkg="cnc_marker" type="gCodeSender.py" name="gCodeSender.py" args="-p /dev/ttyUSB0" args="-f /home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc" /-->
+    <!--node pkg="cnc_marker" type="gCodeSender.py" name="gCodeSender.py" args="$(arg -p) $(arg -f)"-->
+      <!--param name="-p" type="string" value="/dev/ttyUSB0" />
+      <param name="-f" type="string" value="/home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc" /-->
+    <!--/node-->
+    <!--args="$(arg a) $(arg b)" -->
+    <node pkg="cnc_marker" type="gCodeSender.py" name="gCodeSender" output="screen" args="-a /dev/ttyUSB0 -b /home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc" />
+    <!--node pkg="rospy_tutorials" type="talker" name="talker"-->
+      
+      
+      <!--remap from="chatter" to="hello-1"/-->
+      
+    <!--/node-->
+</launch>

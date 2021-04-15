@@ -6,25 +6,50 @@ import io
 import argparse
 import rospy
 from std_msgs.msg import String
+import os
+import sys
 
-
+print ("Gcode sender is trying to open" )
 parser = argparse.ArgumentParser(description='This is a basic gcode sender by Javier S.')
-parser.add_argument('-p','--port', help='Input USB port',required=True)
-parser.add_argument('-f','--file', help='Gcode file name',required=True)
-args = parser.parse_args()
+#parser.add_argument('-p','--port', help='Input USB port',required=True)
+#parser.add_argument('-f','--file', help='Gcode file name',required=True)
+parser.add_argument('-a','--port', help='Input USB port', default="/dev/ttyUSB0")
+parser.add_argument('-b','--file', help='Gcode file name', default="/home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc")
+#--args = parser.parse_args()
+args, unknown = parser.parse_known_args()
 ## show values ##
 print ("USB Port: %s" % args.port )
 print ("Gcode file: %s" % args.file )
 #Example--> ./gCodeSender.py -p /dev/ttyACM0 -f ./grbl.gcode
 #>>reset_arduino()
 #>>time.sleep(2) 
-s = serial.Serial(args.port,115200)
-spaces = "\r\n\r\n" 
-# Wake up grbl
-s.write(spaces.encode())
-#s.write("\r\n\r\n")
-time.sleep(2)   # Wait for grbl to initialize
-s.flushInput()  # Flush startup text in serial input
+s = serial.Serial()
+
+i = 1
+while 1:
+    print(i)
+    
+    try:
+        i += 1
+        print ("Trying to open the Port: %s" % args.port )
+        s = serial.Serial(args.port,115200)
+        spaces = "\r\n\r\n" 
+        # Wake up grbl
+        s.write(spaces.encode())
+        #s.write("\r\n\r\n")
+        time.sleep(2)   # Wait for grbl to initialize
+        s.flushInput()  # Flush startup text in serial input
+        break
+    except:
+        print("An exception occurred, could not Conect ")
+        if i >= 5:
+            print("try Tomorrow ....")
+            time.sleep(1) 
+            sys.exit(1) 
+            break
+    #resetSerial()
+
+
 
 
 def callback(data):
@@ -70,5 +95,16 @@ def listener():
 def reset_arduino():
     pass
 
+def resetSerial():
+    print ("ReTrying to open the Port: %s" % args.port )
+    s = serial.Serial(args.port,115200)
+    spaces = "\r\n\r\n" 
+    # Wake up grbl
+    s.write(spaces.encode())
+    #s.write("\r\n\r\n")
+    time.sleep(2)   # Wait for grbl to initialize
+    s.flushInput()  # Flush startup text in serial input
+
 if __name__ == '__main__':
+    print ('****in the main ****')
     listener()
