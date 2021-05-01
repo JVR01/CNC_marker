@@ -19,20 +19,14 @@ std_msgs::String status;
 std::ofstream fs("src/cnc_marker/src/GcodeText.txt"); //writes out the results
 char valid_chars[] = { 'A', 'B', 'C'  }; //'\0'
 
-
 CSVRow roww;
-//--std::string path = "/src/cnc_marker/src/Characters";
 
-std::string path =     "/home/toby001/catkin_ws/src/cnc_marker/src/Characters/";
-std::string Out_Path = "/home/toby001/catkin_ws/src/cnc_marker/";//   /home/toby001/catkin_ws/src/cnc_marker
+//std::string char_path = "/home/toby001/catkin_ws/src/cnc_marker/src/Characters/";
+//std::string Out_Path = "/home/toby001/catkin_ws/src/cnc_marker/";
 
+std::string char_path = "/home/tamer/ros_catkin_ws/src/CNC_marker/src/Characters/";
+std::string Out_Path = "/home/tamer/ros_catkin_ws/src/CNC_marker/";
 
-//myfile.close();
-
-/**
- * This tutorial demonstrates simple sending of messages over the ROS system.
- */
-//void pubstatus(){}
 bool input_valid(std::string const &message)
 {
   bool valid = true;
@@ -76,7 +70,7 @@ void pubstatus(std::string msg_str)
 
 void generate_code(std::string const & message)
 {
-  GcodeParser GCode(path, Out_Path);
+  GcodeParser GCode(char_path, Out_Path);
   GCode.add_start_code();
   //int U = GCode.add_character("A");
   //U = GCode.add_character(" ");
@@ -128,6 +122,24 @@ void chatterCallback(const std_msgs::String::ConstPtr &msg)
 
 int main(int argc, char **argv)
 {
+
+  std::cout << "You have entered " << argc << " arguments:" << "\n";
+
+    
+  if(argc > 1)
+  {
+  for (int i = 0; i < argc; ++i){
+        std::cout <<"Arg"<<i+1<<" :"<< argv[i] << "\n";
+  }  
+  char_path = argv[1];
+  Out_Path = argv[2];     
+  }
+  else if(argc >= 3)
+  {
+    std::cout << "WRONG number of" << argc << " ARGUMENTS" << "\n";
+    return 0;
+  }
+
   ros::init(argc, argv, "keybord_listener");
   ros::NodeHandle n;
   ros::Rate loop_rate(10);

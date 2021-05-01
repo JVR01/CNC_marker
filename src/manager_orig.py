@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # license removed for brevity
 import rospy
@@ -6,13 +6,15 @@ import time
 import logging
 import threading
 import sys
+
 import os  #sys.exit(1)
+from pynput.keyboard import Key, Controller
+
 from std_msgs.msg import String
+#import curses
 from rospy import init_node, is_shutdown
 
-Flag = True #useles but used for textInput
-print("++++++-->manager started!!<----++++++++++++++++++++++++++++++++++++++++++++++++")
-
+Flag = True
  #testline
 class MyThread(threading.Thread):
   
@@ -62,7 +64,19 @@ def myhook():
   rospy.loginfo(threading.__name__)
   if x.is_alive() is True:
     rospy.loginfo("Thread active and listening")
-   
+    #x._block
+    #threading.Thread._block
+  #t1.stop()
+  keyboard = Controller()
+  keyboard.press('E')
+  keyboard.press('n')
+  keyboard.press('d')
+  
+  keyboard.press(Key.enter)
+  keyboard.release(Key.enter)
+  keyboard.press('ZZZ')
+  #keyboard.press(Key.enter)
+  #Key.enter
   os.system("\r\n") 
   sys.exit()
   sys.exit(1)
@@ -88,7 +102,8 @@ def talker2():
     hello_str = keyboard_input 
     rospy.loginfo(hello_str)
     pub2.publish(hello_str)    
-      
+    
+    
 
 def listener():
 
@@ -105,12 +120,7 @@ def get_keyboard_input(name):
     
     print ("give something, please?")
     if Flag == True:
-
-       try:
-          something = raw_input("tell somesing:  ")
-       except:
-          something = input("tell somesing:  ")
-       #--something = raw_input("tell somesing:  ")
+       something = input("tell somesing:  ") #wont Work for raspberry
        print ("thanks for giving me " + something)
     
     if something == "Exit":

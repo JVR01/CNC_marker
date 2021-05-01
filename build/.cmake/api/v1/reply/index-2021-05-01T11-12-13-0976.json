@@ -25,7 +25,7 @@
 	"objects" : 
 	[
 		{
-			"jsonFile" : "codemodel-v2-d6a3f386b92c529f2818.json",
+			"jsonFile" : "codemodel-v2-a4b5cb9f47610c4d4a30.json",
 			"kind" : "codemodel",
 			"version" : 
 			{
@@ -58,6 +58,10 @@
 					{
 						"kind" : "codemodel",
 						"version" : 2
+					},
+					{
+						"kind" : "toolchains",
+						"version" : 1
 					}
 				],
 				"responses" : 
@@ -72,13 +76,16 @@
 						}
 					},
 					{
-						"jsonFile" : "codemodel-v2-d6a3f386b92c529f2818.json",
+						"jsonFile" : "codemodel-v2-a4b5cb9f47610c4d4a30.json",
 						"kind" : "codemodel",
 						"version" : 
 						{
 							"major" : 2,
 							"minor" : 0
 						}
+					},
+					{
+						"error" : "unknown request kind 'toolchains'"
 					}
 				]
 			}

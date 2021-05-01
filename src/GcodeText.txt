@@ -1,9 +1,9 @@
 result U: 0
 char_Path:/home/toby001/catkin_ws/src/cnc_marker/src/Characters/
-Test number: ABC
-result U: 0
-char_Path:/home/toby001/catkin_ws/src/cnc_marker/src/Characters/
 Test number: A
 result U: 0
 char_Path:/home/toby001/catkin_ws/src/cnc_marker/src/Characters/
-Test number: C
+Test number: BC
+result U: 0
+char_Path:/home/toby001/catkin_ws/src/cnc_marker/src/Characters/
+Test number: BC

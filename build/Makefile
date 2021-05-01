@@ -532,6 +532,60 @@ src/GcodeGenerator.cpp.s:
 	$(MAKE) -f CMakeFiles/GcodeGenerator.dir/build.make CMakeFiles/GcodeGenerator.dir/src/GcodeGenerator.cpp.s
 .PHONY : src/GcodeGenerator.cpp.s
 
+src/lib/text_parser/csv_row.o: src/lib/text_parser/csv_row.cpp.o
+
+.PHONY : src/lib/text_parser/csv_row.o
+
+# target to build an object file
+src/lib/text_parser/csv_row.cpp.o:
+	$(MAKE) -f CMakeFiles/GcodeGenerator.dir/build.make CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.o
+.PHONY : src/lib/text_parser/csv_row.cpp.o
+
+src/lib/text_parser/csv_row.i: src/lib/text_parser/csv_row.cpp.i
+
+.PHONY : src/lib/text_parser/csv_row.i
+
+# target to preprocess a source file
+src/lib/text_parser/csv_row.cpp.i:
+	$(MAKE) -f CMakeFiles/GcodeGenerator.dir/build.make CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.i
+.PHONY : src/lib/text_parser/csv_row.cpp.i
+
+src/lib/text_parser/csv_row.s: src/lib/text_parser/csv_row.cpp.s
+
+.PHONY : src/lib/text_parser/csv_row.s
+
+# target to generate assembly for a file
+src/lib/text_parser/csv_row.cpp.s:
+	$(MAKE) -f CMakeFiles/GcodeGenerator.dir/build.make CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.s
+.PHONY : src/lib/text_parser/csv_row.cpp.s
+
+src/lib/text_parser/gcode_parser.o: src/lib/text_parser/gcode_parser.cpp.o
+
+.PHONY : src/lib/text_parser/gcode_parser.o
+
+# target to build an object file
+src/lib/text_parser/gcode_parser.cpp.o:
+	$(MAKE) -f CMakeFiles/GcodeGenerator.dir/build.make CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.o
+.PHONY : src/lib/text_parser/gcode_parser.cpp.o
+
+src/lib/text_parser/gcode_parser.i: src/lib/text_parser/gcode_parser.cpp.i
+
+.PHONY : src/lib/text_parser/gcode_parser.i
+
+# target to preprocess a source file
+src/lib/text_parser/gcode_parser.cpp.i:
+	$(MAKE) -f CMakeFiles/GcodeGenerator.dir/build.make CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.i
+.PHONY : src/lib/text_parser/gcode_parser.cpp.i
+
+src/lib/text_parser/gcode_parser.s: src/lib/text_parser/gcode_parser.cpp.s
+
+.PHONY : src/lib/text_parser/gcode_parser.s
+
+# target to generate assembly for a file
+src/lib/text_parser/gcode_parser.cpp.s:
+	$(MAKE) -f CMakeFiles/GcodeGenerator.dir/build.make CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.s
+.PHONY : src/lib/text_parser/gcode_parser.cpp.s
+
 src/listenercpp.o: src/listenercpp.cpp.o
 
 .PHONY : src/listenercpp.o
@@ -601,6 +655,12 @@ help:
 	@echo "... src/GcodeGenerator.o"
 	@echo "... src/GcodeGenerator.i"
 	@echo "... src/GcodeGenerator.s"
+	@echo "... src/lib/text_parser/csv_row.o"
+	@echo "... src/lib/text_parser/csv_row.i"
+	@echo "... src/lib/text_parser/csv_row.s"
+	@echo "... src/lib/text_parser/gcode_parser.o"
+	@echo "... src/lib/text_parser/gcode_parser.i"
+	@echo "... src/lib/text_parser/gcode_parser.s"
 	@echo "... src/listenercpp.o"
 	@echo "... src/listenercpp.i"
 	@echo "... src/listenercpp.s"

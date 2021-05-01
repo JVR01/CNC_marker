@@ -9,6 +9,10 @@
 
 
 >rosrun cnc_marker GcodeGenerator
+>rosrun cnc_marker GcodeGenerator /home/toby001/catkin_ws/src/cnc_marker/src/Characters/ /home/toby001/catkin_ws/src/cnc_marker/
+>RASPI->rosrun cnc_marker GcodeGenerator /home/tamer/ros_catkin_ws/src/CNC_marker/src/Characters/ /home/tamer/ros_catkin_ws/src/CNC_marker/
+
+
 
 -this one hears and waits for "/keyboard" topic. 
 - If the message is valid "input_valid(std::string message)", it executes the function: "generate_code(message)"
@@ -19,3 +23,14 @@
 >rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f ~/catkin_ws/src/cnc_marker/src/grbl.gcode
 
 >rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f /home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc
+
+
+or just:
+>roslaunch cnc_marker Marker.launch
+>roslaunch cnc_marker demo.launch
+
+
+sudo apt install sshfs
+sshfs tamer@192.168.2.109: pi
+sudo apt-get install python-is-python3   ->to be able to run Python code in Python3 (not really, but he knows python)
+

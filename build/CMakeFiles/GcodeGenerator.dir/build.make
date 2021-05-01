@@ -70,14 +70,44 @@ CMakeFiles/GcodeGenerator.dir/src/GcodeGenerator.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GcodeGenerator.dir/src/GcodeGenerator.cpp.s"
 	/bin/x86_64-linux-gnu-g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/toby001/catkin_ws/src/cnc_marker/src/GcodeGenerator.cpp -o CMakeFiles/GcodeGenerator.dir/src/GcodeGenerator.cpp.s
 
+CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.o: CMakeFiles/GcodeGenerator.dir/flags.make
+CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.o: ../src/lib/text_parser/csv_row.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/toby001/catkin_ws/src/cnc_marker/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.o"
+	/bin/x86_64-linux-gnu-g++-9  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.o -c /home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/csv_row.cpp
+
+CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.i"
+	/bin/x86_64-linux-gnu-g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/csv_row.cpp > CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.i
+
+CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.s"
+	/bin/x86_64-linux-gnu-g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/csv_row.cpp -o CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.s
+
+CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.o: CMakeFiles/GcodeGenerator.dir/flags.make
+CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.o: ../src/lib/text_parser/gcode_parser.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/toby001/catkin_ws/src/cnc_marker/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.o"
+	/bin/x86_64-linux-gnu-g++-9  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.o -c /home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/gcode_parser.cpp
+
+CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.i"
+	/bin/x86_64-linux-gnu-g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/gcode_parser.cpp > CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.i
+
+CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.s"
+	/bin/x86_64-linux-gnu-g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/gcode_parser.cpp -o CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.s
+
 # Object files for target GcodeGenerator
 GcodeGenerator_OBJECTS = \
-"CMakeFiles/GcodeGenerator.dir/src/GcodeGenerator.cpp.o"
+"CMakeFiles/GcodeGenerator.dir/src/GcodeGenerator.cpp.o" \
+"CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.o" \
+"CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.o"
 
 # External object files for target GcodeGenerator
 GcodeGenerator_EXTERNAL_OBJECTS =
 
 devel/lib/cnc_marker/GcodeGenerator: CMakeFiles/GcodeGenerator.dir/src/GcodeGenerator.cpp.o
+devel/lib/cnc_marker/GcodeGenerator: CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.o
+devel/lib/cnc_marker/GcodeGenerator: CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.o
 devel/lib/cnc_marker/GcodeGenerator: CMakeFiles/GcodeGenerator.dir/build.make
 devel/lib/cnc_marker/GcodeGenerator: /opt/ros/noetic/lib/libroscpp.so
 devel/lib/cnc_marker/GcodeGenerator: /usr/lib/x86_64-linux-gnu/libpthread.so
@@ -105,7 +135,7 @@ devel/lib/cnc_marker/GcodeGenerator: /usr/lib/x86_64-linux-gnu/libboost_thread.s
 devel/lib/cnc_marker/GcodeGenerator: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
 devel/lib/cnc_marker/GcodeGenerator: /opt/ros/noetic/lib/libxmlrpcpp.so
 devel/lib/cnc_marker/GcodeGenerator: CMakeFiles/GcodeGenerator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/toby001/catkin_ws/src/cnc_marker/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable devel/lib/cnc_marker/GcodeGenerator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/toby001/catkin_ws/src/cnc_marker/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable devel/lib/cnc_marker/GcodeGenerator"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/GcodeGenerator.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

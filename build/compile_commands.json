@@ -6,6 +6,16 @@
 },
 {
   "directory": "/home/toby001/catkin_ws/src/cnc_marker/build",
+  "command": "/bin/x86_64-linux-gnu-g++-9  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"cnc_marker\\\" -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/csv_row.cpp.o -c /home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/csv_row.cpp",
+  "file": "/home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/csv_row.cpp"
+},
+{
+  "directory": "/home/toby001/catkin_ws/src/cnc_marker/build",
+  "command": "/bin/x86_64-linux-gnu-g++-9  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"cnc_marker\\\" -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/GcodeGenerator.dir/src/lib/text_parser/gcode_parser.cpp.o -c /home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/gcode_parser.cpp",
+  "file": "/home/toby001/catkin_ws/src/cnc_marker/src/lib/text_parser/gcode_parser.cpp"
+},
+{
+  "directory": "/home/toby001/catkin_ws/src/cnc_marker/build",
   "command": "/bin/x86_64-linux-gnu-g++-9  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"cnc_marker\\\" -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/listenercpp.dir/src/listenercpp.cpp.o -c /home/toby001/catkin_ws/src/cnc_marker/src/listenercpp.cpp",
   "file": "/home/toby001/catkin_ws/src/cnc_marker/src/listenercpp.cpp"
 },
