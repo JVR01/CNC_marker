@@ -97,7 +97,7 @@ ROS_INFO("%s", "hallooooooooooooo");
                             else{result = 1001;}
                             
                         }
-                        output_file << "" << std::endl;
+                        //--output_file << "" << std::endl;
                         text_file.close();
                         //-->std::cout <<"Number of lines Found: "<< number_of_lines << std::endl;
                 }
@@ -157,7 +157,7 @@ ROS_INFO("%s", "hallooooooooooooo");
           output_file << "G54" << std::endl;
           output_file << "G10 L20 P2 X0 Y0" << std::endl;
           output_file << "G55" << std::endl;
-          output_file << "" << std::endl;
+          //--output_file << "" << std::endl;
           //output_file << "G00 X20.0000Y0.0000" << std::endl;
           //output_file << "G56" << std::endl;
           //output_file << "G10 L20 P3 X0 Y0" << std::endl;
@@ -185,7 +185,7 @@ ROS_INFO("%s", "hallooooooooooooo");
           output_file << "M5 S120" << std::endl;
           output_file << "M3" << std::endl;
           output_file << "$H" << std::endl; 
-          output_file << "" << std::endl;
+          //--output_file << "" << std::endl;
         }
         
     private:

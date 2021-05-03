@@ -1,0 +1,71 @@
+Errors found in the gCogeSender: 
+this was send->b'$X\n'<-
+this was send->b'$G\n'<-
+this was send->b'$X\n'<-
+this was send->b'M3\n'<-
+this was send->b'G21 (All units in mm)\n'<-
+this was send->b'G54 (First ofset)\n'<-
+this was send->b'G1 F500\n'<-
+this was send->b'M5 S120\n'<-
+this was send->b'M3\n'<-
+this was send->b'$H\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 X2.799342 Y7.103960\n'<-
+this was send->b'G01 M5 S90 F100.0 (Penetrate)\n'<-
+this was send->b'G01 X0.133342 Y0.103960 M5 S90 F400.000000\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 X2.799342 Y7.103960\n'<-
+this was send->b'G01 M5 S90 F100.0 (Penetrate)\n'<-
+this was send->b'G01 X5.465342 Y0.103960 M5 S90 F400.000000\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 X1.133342 Y2.437360\n'<-
+this was send->b'G01 M5 S90 F100.0 (Penetrate)\n'<-
+this was send->b'G01 X4.465342 Y2.437360 M5 S90 F400.000000\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 X10.0000Y0.0000\n'<-
+this was send->b'G54\n'<-
+this was send->b'G10 L20 P2 X0 Y0\n'<-
+this was send->b'G55\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 X2.799342 Y7.103960\n'<-
+this was send->b'G01 M5 S90 F100.0 (Penetrate)\n'<-
+this was send->b'G01 X0.133342 Y0.103960 M5 S90 F400.000000\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 X2.799342 Y7.103960\n'<-
+this was send->b'G01 M5 S90 F100.0 (Penetrate)\n'<-
+this was send->b'G01 X5.465342 Y0.103960 M5 S90 F400.000000\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 X1.133342 Y2.437360\n'<-
+this was send->b'G01 M5 S90 F100.0 (Penetrate)\n'<-
+this was send->b'G01 X4.465342 Y2.437360 M5 S90 F400.000000\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 X10.0000Y0.0000\n'<-
+this was send->b'G54\n'<-
+this was send->b'G10 L20 P2 X0 Y0\n'<-
+this was send->b'G55\n'<-
+this was send->b'G00 M3\n'<-
+Error Sending line 49 : b'G00 M3\n'
+comentary: error: Unsupported command
+this was send->b'G00 X2.799342 Y7.103960\n'<-
+this was send->b'G01 M5 S90 F100.0 (Penetrate)\n'<-
+this was send->b'G01 X0.133342 Y0.103960 M5 S90 F400.000000\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 X2.799342 Y7.103960\n'<-
+this was send->b'G01 M5 S90 F100.0 (Penetrate)\n'<-
+this was send->b'G01 X5.465342 Y0.103960 M5 S90 F400.000000\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G00 X1.133342 Y2.437360\n'<-
+this was send->b'G01 M5 S90 F100.0 (Penetrate)\n'<-
+this was send->b'G01 X4.465342 Y2.437360 M5 S90 F400.000000\n'<-
+this was send->b'G00 M3\n'<-
+this was send->b'G54 (First ofset)\n'<-
+this was send->b'M3  (Stop Spindle -- Go up servo)\n'<-
+this was send->b'G00 X0.0000 Y0.0000\n'<-
+this was send->b'M2\n'<-
+this was send->b'%\n'<-

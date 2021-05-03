@@ -29,9 +29,12 @@ https://github.com/gnea/grbl/wiki/Grbl-v1.1-Configuration
 //I just altered this File :D JVR, It works. Thoght the important files are in 
 //..\Arduino\libraries\grbl-mi
 // Do not alter this file!
-
+//Chexk the absolte maschine Zero!!
+//G92 X0 Y0 Z0
+//G10 P0 L20 X0 Y0 Z0
 /*
  * M5 brings the servo to 0° CW
  * M4 brings the servo to the last set Sx
  * M3 Sx    -->  0<x<180 brings the servo to x°       x=70 for servo Up CNC-Engraver
  */
+ 

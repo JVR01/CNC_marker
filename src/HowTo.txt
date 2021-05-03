@@ -27,6 +27,7 @@
 
 or just:
 >roslaunch cnc_marker Marker.launch
+>roslaunch cnc_marker Marker.launch RPI1:=ARG1 RPI2:=ARG2
 >roslaunch cnc_marker demo.launch
 
 
