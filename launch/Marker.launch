@@ -8,9 +8,9 @@
     <arg name="RPI1"  default="/home/tamer/ros_catkin_ws/src/CNC_marker/src/Characters/ /home/tamer/ros_catkin_ws/src/CNC_marker/" />
     <arg name="RPI2"  default="-p /dev/ttyUSB0 -f /home/tamer/ros_catkin_ws/src/CNC_marker/OutputFile.ngc" />
 
-    <node pkg="cnc_marker" type="GcodeGenerator" name="GcodeGenerator" args="$(arg RPI1)" />
+    <node pkg="cnc_marker" type="GcodeGenerator" name="GcodeGenerator" args="$(arg ARG1)" />
     <node pkg="cnc_marker" type="manager.py" name="manager" />
-    <node pkg="cnc_marker" type="gCodeSender.py" name="gCodeSender" output="screen" args= "$(arg RPI2)"/>
+    <node pkg="cnc_marker" type="gCodeSender.py" name="gCodeSender" output="screen" args= "$(arg ARG2)"/>
 
 
     <!--arg name="-p"  default="/dev/ttyUSB0" /-->

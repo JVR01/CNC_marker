@@ -158,6 +158,7 @@ int main(int argc, char **argv)
     chatter_pub.publish(status);
     ros::spinOnce();
     loop_rate.sleep();
+    //ros::Duration(0.1).sleep();
     //++count;
   }
   return 0;
