@@ -1,5 +1,3 @@
-
-
 >rosrun cnc_marker manager.py
 
 -This one executes a thread in background that awaits for a keyboard input. When entered a valid word, it publisches the text under "/keyboard"
@@ -13,15 +11,12 @@
 >RASPI->rosrun cnc_marker GcodeGenerator /home/tamer/ros_catkin_ws/src/CNC_marker/src/Characters/ /home/tamer/ros_catkin_ws/src/CNC_marker/
 
 
-
 -this one hears and waits for "/keyboard" topic. 
 - If the message is valid "input_valid(std::string message)", it executes the function: "generate_code(message)"
 
 
 
-
->rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f ~/catkin_ws/src/cnc_marker/src/grbl.gcode
-
+>rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f /home/tamer/ros_catkin_ws/src/CNC_marker/OutputFile.ngc
 >rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f /home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc
 
 
