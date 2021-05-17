@@ -142,10 +142,10 @@ int main(int argc, char **argv)
 
   ros::init(argc, argv, "keybord_listener");
   ros::NodeHandle n;
-  ros::Rate loop_rate(10);
+  ros::Rate loop_rate(5);
   ros::Subscriber sub = n.subscribe("keyboard", 1000, chatterCallback);
   chatter_pub = n.advertise<std_msgs::String>("gcode_status", 1000);
-
+  chatter_pub.publish(status);
   ros::spinOnce();
 
   while (ros::ok())
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
     ss << "idleee " << count;
     status.data = ss.str();
     ROS_INFO("%s", status.data.c_str());
-    chatter_pub.publish(status);
+    //chatter_pub.publish(status);
     ros::spinOnce();
     loop_rate.sleep();
     //ros::Duration(0.1).sleep();

@@ -28,5 +28,29 @@ or just:
 
 sudo apt install sshfs
 sshfs tamer@192.168.2.109: pi
+ssh tamer@192.168.2.109
 sudo apt-get install python-is-python3   ->to be able to run Python code in Python3 (not really, but he knows python)
+
+
+
+
+#Launch on startUp  --> see /Documents/Experiments/howToStarUp.txt  in the gpio example
+#http://wiki.ros.org/robot_upstart   ----Package installed
+#DOCU   ----https://roboticsbackend.com/make-ros-launch-start-on-boot-with-robot_upstart/
+on the raspberry
+>rosrun robot_upstart install cnc_marker/launch/Marker.launch
+wont work, enable service  first!
+
+>rosrun robot_upstart install cnc_marker/launch/Marker.launch --job cnc --symlink
+>sudo systemctl daemon-reload && sudo systemctl start CNC_MARKER
+> sudo systemctl start CNC_MARKER.service
+
+sudo systemctl stop CNC_MARKER.service
+
+#sudo systemctl disable gpioTest.service
+
+#get the log
+>journalctl -u cnc.service -b
+
+
 

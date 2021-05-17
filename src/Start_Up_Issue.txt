@@ -1,0 +1,50 @@
+##########by far is sudo systemctl the best way to start a program at starUp on the raspberry
+
+#install this or it wont work even if it does not compile
+sudo apt-get install daemontools 
+#install the  robot_upstart lib
+in the catkin_package
+>rosrun robot_upstart install cnc_marker/launch/Marker.launch --job CNC --symlink
+
+#writes
+/lib/systemd/system/cnc.service
+/usr/sbin/cnc-start
+/usr/sbin/cnc-stop      #here you can modify the PYTHONPATH if needed
+
+
+
+########It wont start if it does not find the libraries, and it wont find the lib if they are not in
+>echo $PYTHONPATH
+/home/tamer/ros_catkin_ws/devel/lib/python2.7/dist-packages:
+/opt/ros/kinetic/lib/python2.7/dist-packages:/home/tamer/lib/python:
+/home/tamer/.local/lib/python2.7/site-packages                  <------------------ here was the problem :)
+
+>export PYTHONPATH="${PYTHONPATH}:/my/other/path"  on .bashrc  wont help on startup without terminal 
+no mather how it muss be excutated in bash***********export PYTHONPATH=${PYTHONPATH}:/home/tamer/.local/lib/python2.7/site-packages
+
+
+##########################Excute service (also stays avaliable for startup)
+
+>sudo systemctl start cnc , sudo systemctl restart cnc, sudo systemctl stop cnc, ....disable, enable
+##check what went wrong while excuting service 
+>journalctl -u cnc.service -b
+
+########################## To get the path of a python library, used to find  "evdev import InputDevice"
+>>> import os
+>>> import inspect
+>>> inspect.getfile(os)
+'/usr/lib64/python2.7/os.pyc'
+>>> inspect.getfile(inspect)
+'/usr/lib64/python2.7/inspect.pyc'
+>>> os.path.dirname(inspect.getfile(inspect))
+'/usr/lib64/python2.7'
+
+######################## set the rights (Special if raspi uses GPIO, TTY* etc)
+
+Add this into "sudo nano /etc/sudoers.d/my_config_file"
+or
+sudo nano /etc/sudoers
+
+++>tamer ALL=(ALL) NOPASSWD:ALL
+++> add "sudo -E" argument in the .launch >launch-prefix="sudo -E"  (if necessary also $pythonpath)
+
