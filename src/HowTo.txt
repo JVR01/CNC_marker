@@ -16,8 +16,8 @@
 
 
 
->rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f /home/tamer/ros_catkin_ws/src/CNC_marker/OutputFile.ngc
->rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f /home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc
+>RASPI###>>>>rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f /home/tamer/ros_catkin_ws/src/CNC_marker/OutputFile.ngc
+>UBUNTU***>>>rosrun cnc_marker gCodeSender.py -p /dev/ttyUSB0 -f /home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc
 
 
 or just:
@@ -42,12 +42,12 @@ on the raspberry
 wont work, enable service  first!
 
 >rosrun robot_upstart install cnc_marker/launch/Marker.launch --job cnc --symlink
+Befor runnig this make sure to add the right python extention-path into the bash file at start >>sudo nano /usr/sbin/cnc-start
 >sudo systemctl daemon-reload && sudo systemctl start CNC_MARKER
-> sudo systemctl start CNC_MARKER.service
 
-sudo systemctl stop CNC_MARKER.service
-
-#sudo systemctl disable gpioTest.service
+sudo systemctl start cnc.service
+sudo systemctl stop cnc.service
+sudo systemctl disable cnc.service
 
 #get the log
 >journalctl -u cnc.service -b

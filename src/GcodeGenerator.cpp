@@ -18,7 +18,7 @@ int count = 0;
 std_msgs::String status;
 std::ofstream fs("src/cnc_marker/src/GcodeText.txt"); //writes out the results
 char valid_chars[] = { 'A', 'B', 'C'  }; //'\0'
-
+bool validate_next = true;
 CSVRow roww;
 
 //std::string char_path = "/home/toby001/catkin_ws/src/cnc_marker/src/Characters/";
@@ -80,11 +80,8 @@ void generate_code(std::string const & message)
   int U = GCode.add_phrase(message);
   //U = GCode.add_phrase("moquito");
   //GCode.add_end_code();
-
-
   fs << "result U: " << U << std::endl;
   fs << "char_Path:" << GCode.getCharPath()<< std::endl;
-  
 
   for (int i = 0; i <= 100; i++)
   {
@@ -97,8 +94,15 @@ void generate_code(std::string const & message)
   //fs << "Test number: " << ss.str() << std::endl;
   fs << "Test number: " << message << std::endl;
   std::string  msg = "gcode_ready";
-  pubstatus(msg);
-
+  //---->pubstatus(msg); //original comand
+  if (validate_next)
+  {
+    pubstatus(msg);
+  }
+  else
+  {
+    pubstatus("Bussy now");
+  }
 }
 
 void chatterCallback(const std_msgs::String::ConstPtr &msg)
@@ -106,7 +110,6 @@ void chatterCallback(const std_msgs::String::ConstPtr &msg)
   ++count;
   ROS_INFO("GcodeGenerator heard: [%s]", msg->data.c_str());
   
-
   std::string message = msg->data;
   if (input_valid(message))
   {
@@ -117,6 +120,23 @@ void chatterCallback(const std_msgs::String::ConstPtr &msg)
     pubstatus("wrong input");
   }
   ros::Duration(1.0).sleep();
+}
+
+void Callback_Sender(const std_msgs::String::ConstPtr &msg)
+{
+ 
+  //ROS_INFO("GcodeGenerator, heard sender: [%s]", msg->data.c_str());
+  
+  std::string message = msg->data;
+  if (message == "Terminated")
+  {
+    validate_next = true;
+  }
+  else
+  {
+    validate_next = false;
+    //pubstatus("Bussy now");
+  }
 }
 
 
@@ -142,8 +162,9 @@ int main(int argc, char **argv)
 
   ros::init(argc, argv, "keybord_listener");
   ros::NodeHandle n;
-  ros::Rate loop_rate(5);
+  ros::Rate loop_rate(5); //5Hz
   ros::Subscriber sub = n.subscribe("keyboard", 1000, chatterCallback);
+  ros::Subscriber sub_status = n.subscribe("sender_status", 1000, Callback_Sender);
   chatter_pub = n.advertise<std_msgs::String>("gcode_status", 1000);
   chatter_pub.publish(status);
   ros::spinOnce();

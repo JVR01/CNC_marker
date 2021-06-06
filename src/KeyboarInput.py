@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import rospy
 import re
-
+import os
 import drivers
 from time import sleep
-
+import commands
+import subprocess
 
 #neoPixel LED https://github.com/rpi-ws281x/rpi-ws281x-python
 import time
@@ -29,17 +30,22 @@ import RPi.GPIO as GPIO
 import time
 GPIO.setmode(GPIO.BCM)
 
-led = 14
+#led = 14
 switch_start = 24 #Blue18 Yell24  RED23
-LED_GREEN = 20
+switch_stop = 23
+switch_clear = 25
+#LED_GREEN = 20
 
-GPIO.setup(led, GPIO.OUT)
-GPIO.setup(LED_GREEN, GPIO.OUT)
+#GPIO.setup(led, GPIO.OUT)
+#GPIO.setup(LED_GREEN, GPIO.OUT)
 GPIO.setup(switch_start, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Set pin   GPIO.PUD_DOWN-con3.3v    GPIO.PUD_UP-conGRD
+GPIO.setup(switch_stop, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(switch_clear, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 dev = InputDevice('/dev/input/event0')
 display = drivers.Lcd()
-keyboard_input = "awesome"
+keyboard_input = ""
+status = "Starting..."
 Counter = 0
 prev_inp1 = 1
 
@@ -47,18 +53,28 @@ print('test')
 print(dev)
 
 
-def callback(data):
+def callback(data): #"chatter" topic
     global prev_inp1
     rospy.loginfo(rospy.get_caller_id() + " I heard: %s", data.data)
-    blink(LED_GREEN)
+    #blink(LED_GREEN)
     blink_rgb(1,0,1)
     prev_inp1 = 1
 
+def callback_status(data): #"status" topic
+    global Counter
+    global status
+    rospy.loginfo(rospy.get_caller_id() + " I heard: %s", data.data)
+    status = data.data
+    Counter = Counter + 1
+    print ("Counter: " + str(Counter))
+    #show_screen(status + ":" + str(Counter)) 
+    show_screen(status) 
     
     
 def listener():
     rospy.init_node('raspi_node', anonymous=True)
     rospy.Subscriber("chatter", String, callback)
+    rospy.Subscriber("status", String, callback_status)
     #rospy.spin() 
     
 def talker():
@@ -95,22 +111,23 @@ def show_screen(word):
     # Clear the display of any data     
 
 def toggle_led():
-    channel_is_on = GPIO.input(led)
+    #channel_is_on = GPIO.input(led)
     print('Switch_start status = ', GPIO.input(switch_start))
     print('LED status = ', channel_is_on)
 
     if channel_is_on:
         print('device off')
-        GPIO.output(led, GPIO.LOW)
+        #GPIO.output(led, GPIO.LOW)
         time.sleep(0.2)
     else:
         print('device on')
-        GPIO.output(led, GPIO.HIGH)
+        #GPIO.output(led, GPIO.HIGH)
         time.sleep(0.2)
     
 
 def helper(dev):
     global keyboard_input
+    global status
     print('------------------------------------')
     for ev in dev.read_loop():
         
@@ -125,7 +142,8 @@ def helper(dev):
                 blink_rgb(0,0,1)#blue
             elif key_data.keystate and key_data.keycode == 'KEY_ESC': 
                 print('I get out of here!')
-                blink(led)
+                show_screen("Leaving..")
+                #blink(led)
                 blink_rgb(1,0,0)#red
                 return
             elif key_data.keystate and key_data.keycode == 'KEY_BACKSPACE': 
@@ -150,7 +168,8 @@ def helper(dev):
                     print(found)
                     keyboard_input = keyboard_input + found
                     #pass 
-            show_screen("nix")    
+            status = "Texting..."        
+            show_screen(status)    
                 
 def Interrupt_Start(channel):
   global Counter
@@ -159,14 +178,41 @@ def Interrupt_Start(channel):
 
   if (not inp): #prev_inp1 == 1
      # Counter um eins erhoehen und ausgeben
-     Counter = Counter + 1
-     print ("Counter: " + str(Counter))
+     #Counter = Counter + 1
+     #print ("Counter: " + str(Counter))
+     show_screen("Sending...")
      talker() 
-     blink(LED_GREEN)
-     blink_rgb(0, 1, 0) #r,g,b
+     #blink(LED_GREEN)
+     blink_rgb(1, 1, 0) #r,g,b
      prev_inp1 = 0
 
-     
+def Interrupt_Clear(channel):
+  global Counter
+  inp = GPIO.input(switch_clear)
+
+  if (not inp): #prev_inp1 == 1
+     # Counter um eins erhoehen und ausgeben
+     Counter = 0
+     display = drivers.Lcd()
+     show_screen("Clear...")
+     show_screen("Clear...")
+     print ("Clear..." ) 
+     blink_rgb(1 , 0, 1) #r,g,b
+         
+def Interrupt_Stop(channel):
+  
+  inp = GPIO.input(switch_stop)
+
+  if (not inp): #prev_inp1 == 1
+     # Counter um eins erhoehen und ausgeben
+     show_screen("STOP...")
+     blink_rgb(1 , 0, 0) #r,g,b
+     # Command to execute
+     os.system("sudo systemctl restart cnc.service")
+     #os.system("sudo reboot")
+     blink_rgb(1 , 1, 1) #r,g,b
+     #++os.system("sudo bash /home/tamer/ros_catkin_ws/src/CNC_marker/src/stop_start.sh >>erase.txt")
+          
           
 def blink(led_pin):
     
@@ -185,15 +231,34 @@ def blink_rgb(r , g , b):
         colorWipe(strip, Color(255*r, 255*g, 255*b))  # Red wipe
         time.sleep(0.08)
         colorWipe(strip, Color(0, 0, 0))
-        time.sleep(0.08)        
+        time.sleep(0.08)
 
-GPIO.add_event_detect(switch_start, GPIO.RISING, callback = Interrupt_Start, bouncetime = 500)  
+def start_topic():
+    #global topic_init
+    global keyboard_input
+    
+    keyboard_input = "init"
+    
+    for i in range(2):
+        talker()
+        time.sleep(0.2)
+        
+    keyboard_input = ""                 
+    show_screen("Sending...")
+
+GPIO.add_event_detect(switch_start, GPIO.RISING, callback = Interrupt_Start, bouncetime = 250)  
+GPIO.add_event_detect(switch_stop, GPIO.RISING, callback = Interrupt_Stop, bouncetime = 250) 
+GPIO.add_event_detect(switch_clear, GPIO.RISING, callback = Interrupt_Clear, bouncetime = 250) 
         
 if __name__ == '__main__':
     try:
        print("was du labberst!!??")
        strip.begin() # init the led
+       show_screen(status)
+       blink_rgb(0,1,0)#rgb
+       blink_rgb(0,1,0)
        listener()
+       start_topic()
        helper(dev)
     except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
        print("Keyboard interrupt")   

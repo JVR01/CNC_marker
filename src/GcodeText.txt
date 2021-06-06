@@ -1,6 +1,12 @@
 result U: 0
 char_Path:/home/toby001/catkin_ws/src/cnc_marker/src/Characters/
-Test number: AAC
+Test number: CC
 result U: 0
 char_Path:/home/toby001/catkin_ws/src/cnc_marker/src/Characters/
-Test number: CCB
+Test number: BA
+result U: 0
+char_Path:/home/toby001/catkin_ws/src/cnc_marker/src/Characters/
+Test number: BCA
+result U: 0
+char_Path:/home/toby001/catkin_ws/src/cnc_marker/src/Characters/
+Test number: AAAAAA

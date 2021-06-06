@@ -8,8 +8,8 @@ in the catkin_package
 
 #writes
 /lib/systemd/system/cnc.service
-/usr/sbin/cnc-start
-/usr/sbin/cnc-stop      #here you can modify the PYTHONPATH if needed
+/usr/sbin/cnc-start         #here you can modify the PYTHONPATH if needed     <<<export PYTHONPATH=${PYTHONPATH}:/home/tamer/.local/lib/python2.7/site-packages
+/usr/sbin/cnc-stop      
 
 
 
@@ -19,7 +19,7 @@ in the catkin_package
 /opt/ros/kinetic/lib/python2.7/dist-packages:/home/tamer/lib/python:
 /home/tamer/.local/lib/python2.7/site-packages                  <------------------ here was the problem :)
 
->export PYTHONPATH="${PYTHONPATH}:/my/other/path"  on .bashrc  wont help on startup without terminal 
+>export PYTHONPATH="${PYTHONPATH}:/my/other/path"  ----on .bashrc  wont help on startup without terminal 
 no mather how it muss be excutated in bash***********export PYTHONPATH=${PYTHONPATH}:/home/tamer/.local/lib/python2.7/site-packages
 
 

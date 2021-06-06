@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<launch>
+    
+   
+    
+    <node pkg="cnc_marker" type="KeyboarInput.py" name="KeyboarInput" output="screen" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" />
+    
+    
+</launch>

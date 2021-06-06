@@ -2,20 +2,18 @@
 
 <launch>
     
-    <!--node pkg="cnc_marker" type="gCodeSender.py" name="gCodeSender" output="screen" args="-p /dev/ttyUSB0 -f /home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc" /-->
     <arg name="ARG1"  default="/home/toby001/catkin_ws/src/cnc_marker/src/Characters/ /home/toby001/catkin_ws/src/cnc_marker/" />
     <arg name="ARG2"  default="-p /dev/ttyUSB0 -f /home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc" />
     
     <arg name="RPI1"  default="/home/tamer/ros_catkin_ws/src/CNC_marker/src/Characters/ /home/tamer/ros_catkin_ws/src/CNC_marker/" />
     <arg name="RPI2"  default="-p /dev/ttyUSB0 -f /home/tamer/ros_catkin_ws/src/CNC_marker/OutputFile.ngc" />
-
-    <node pkg="cnc_marker" type="manager.py" name="manager" />
-    <node pkg="cnc_marker" type="GcodeGenerator" name="GcodeGenerator" args="$(arg RPI1)" />
-    <node pkg="cnc_marker" type="gCodeSender.py" name="gCodeSender" output="screen" args= "$(arg RPI2)"/>
+                               
+    <node pkg="cnc_marker" type="manager.py"      name="manager" />
+    <node pkg="cnc_marker" type="GcodeGenerator"  name="GcodeGenerator" args="$(arg RPI1)" />
+    <node pkg="cnc_marker" type="gCodeSender.py"  name="gCodeSender"  launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen"  args= "$(arg RPI2)"/>
     <node pkg="cnc_marker" type="KeyboarInput.py" name="KeyboarInput" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" />
     
-    
-    <!--node pkg="cnc_marker" type="led_actuator.py" name="led_actuator" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" /-->
+    <!--node pkg="cnc_marker" type="led_actuator.py" name="led_actuator"  output="screen" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" /-->
     
     <!--node pkg="cnc_marker" type="KeyboarInput.py" name="KeyboarInput" launch-prefix="sudo -E PYTHONPATH=/home/tamer/ros_catkin_ws/devel/lib/python2.7/dist-packages:/opt/ros/kinetic/lib/python2.7/dist-packages:/home/tamer/lib/python:/home/tamer/.local/lib/python2.7/site-packages" /-->
 </launch>
