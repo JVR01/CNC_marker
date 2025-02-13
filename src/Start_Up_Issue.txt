@@ -1,6 +1,6 @@
 ##########by far is sudo systemctl the best way to start a program at starUp on the raspberry
 
-#install this or it wont work even if it does not compile
+#install this or it wont work even if it does compile
 sudo apt-get install daemontools 
 #install the  robot_upstart lib
 in the catkin_package
@@ -47,4 +47,29 @@ sudo nano /etc/sudoers
 
 ++>tamer ALL=(ALL) NOPASSWD:ALL
 ++> add "sudo -E" argument in the .launch >launch-prefix="sudo -E"  (if necessary also $pythonpath)
+
+
+
+For sudo right for KeyboarInput.py
+19 Abril 2022 update
+
+
+None of the replies above include all steps. I needed to complete the following steps to get non-root access to the GPIO pins. I had to create a new group, add my user to this group then change permissions (as in the previous posts).
+
+sudo groupadd gpio
+sudo usermod -a -G gpio user_name
+sudo grep gpio /etc/group
+sudo chown root.gpio /dev/gpiomem
+sudo chmod g+rw /dev/gpiomem
+
+
+
+Argument for 400-> gcodesender.py
+-p /dev/ttyUSB0 -f /home/jvr/catkin_ws/src/CNC_marker/OutputFile.ngc
+
+Argument for 400-> GcodeGenerator
+rosrun cnc_marker GcodeGenerator ~/catkin_ws/src/CNC_marker/src/Characters/ ~/catkin_ws/src/CNC_marker/
+
+##super usefull, get the number of PId that involve that name--> pgrep -f KeyboarInput -c
+
 

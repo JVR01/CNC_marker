@@ -1,20 +1,30 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+'''
+this script Takes and procces the Keyboard inputs and also controls the LCD-screen and the rgb-LED
+the given text ist Published throgh the topic: 'Keyboard_Input' 
+
+'''
+from turtle import delay
 import rospy
 import re
 import os
 import drivers
 from time import sleep
-import commands
+#>>>>>import commands
 import subprocess
 
 #neoPixel LED https://github.com/rpi-ws281x/rpi-ws281x-python
 import time
 from rpi_ws281x import PixelStrip, Color
 import argparse
+
+import rosgraph
+import socket
+
 # LED strip configuration:
 LED_COUNT = 1        # Number of LED pixels.
-LED_PIN = 18       # GPIO pin connected to the pixels (18 uses PWM!).
-# LED_PIN = 10        # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
+LED_PIN = 18       # GPIO pin connected to the pixels (18 uses PWM!).s
 LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA = 10          # DMA channel to use for generating signal (try 10)
 LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
@@ -31,9 +41,9 @@ import time
 GPIO.setmode(GPIO.BCM)
 
 #led = 14
-switch_start = 24 #Blue18 Yell24  RED23
-switch_stop = 23
-switch_clear = 25
+switch_start = 24 #Yellow
+switch_stop = 23 #Red
+switch_clear = 25#Blue
 #LED_GREEN = 20
 
 #GPIO.setup(led, GPIO.OUT)
@@ -49,16 +59,17 @@ status = "Starting..."
 Counter = 0
 prev_inp1 = 1
 
+
 print('test')
 print(dev)
+print(dev.name)
 
+if (dev.name != "2.4G Composite Devic"):
+    print("Defaul keyboard failed but trying alternative ...")
+    dev = InputDevice('/dev/input/event3')
+    print(dev)
+    print(dev.name)
 
-def callback(data): #"chatter" topic
-    global prev_inp1
-    rospy.loginfo(rospy.get_caller_id() + " I heard: %s", data.data)
-    #blink(LED_GREEN)
-    blink_rgb(1,0,1)
-    prev_inp1 = 1
 
 def callback_status(data): #"status" topic
     global Counter
@@ -73,9 +84,12 @@ def callback_status(data): #"status" topic
     
 def listener():
     rospy.init_node('raspi_node', anonymous=True)
-    rospy.Subscriber("chatter", String, callback)
+    #rospy.Subscriber("chatter", String, callback)
     rospy.Subscriber("status", String, callback_status)
-    #rospy.spin() 
+    #rospy.spin()
+    # Set rospy to exectute a shutdown function when terminating the script
+    rospy.on_shutdown(myhook)
+
     
 def talker():
     global keyboard_input
@@ -88,11 +102,7 @@ def talker():
     rospy.loginfo(keyboard_input)
     pub.publish(keyboard_input)
     #rate.sleep()       
-'''
-for event in dev.read_loop():
-    if event.type == ecodes.EV_KEY:
-        print(categorize(event))
-'''
+
 def colorWipe(strip, color, wait_ms=50):
     """Wipe color across display a pixel at a time."""
     for i in range(strip.numPixels()):
@@ -101,129 +111,127 @@ def colorWipe(strip, color, wait_ms=50):
         time.sleep(wait_ms / 1000.0)
 
 def show_screen(word):
+    global keyboard_input
     display.lcd_clear()
-    #print("Writing to display")
     display.lcd_display_string(keyboard_input,1)
-    display.lcd_display_string(word, 2) # Write line of text to second line of display
-    #sleep(2)                                           # Give time for the message to be read
-    #display.lcd_display_string("I am a display!", 1)   # Refresh the first line of display with a different message
-    #sleep(2)                                           # Give time for the message to be read
-    # Clear the display of any data     
+    display.lcd_display_string(word, 2) # Write line of text to second line of display    
 
-def toggle_led():
-    #channel_is_on = GPIO.input(led)
-    print('Switch_start status = ', GPIO.input(switch_start))
-    print('LED status = ', channel_is_on)
-
-    if channel_is_on:
-        print('device off')
-        #GPIO.output(led, GPIO.LOW)
-        time.sleep(0.2)
-    else:
-        print('device on')
-        #GPIO.output(led, GPIO.HIGH)
-        time.sleep(0.2)
-    
-
-def helper(dev):
+def keyboard_read_helper(dev):
     global keyboard_input
     global status
-    print('------------------------------------')
+
+    print('------------------keyboard_read_helper started------------------')
     for ev in dev.read_loop():
         
+        #if KeyboardInterrupt: #rospy.ROSInterruptException: #rospy.is_shutdown():
+         #   print('fiishing the keyRead loop!')
+          #  exit()
+        try:
+            rosgraph.Master('/rostopic').getPid()
+        except socket.error:
+            print('finishing the keyRead loop!')
+            exit()
+            #raise ROSTopicIOException("Unable to communicate with master!")
+            
+
         if ev.type == ecodes.EV_KEY:
             key_data= categorize(ev)
-            print(key_data.keycode)
-            #print(key_data)
+            #print(key_data.keycode)
+
+            if key_data.keystate == key_data.key_down:
+                c = key_data.keycode
+                print('c: ' , c)
+                #print(categorize(ev))
+                #print(key_data)
                
-            if key_data.keystate and key_data.keycode == 'KEY_1':
-                print('toggle')
-                toggle_led()
-                blink_rgb(0,0,1)#blue
-            elif key_data.keystate and key_data.keycode == 'KEY_ESC': 
-                print('I get out of here!')
-                show_screen("Leaving..")
-                #blink(led)
-                blink_rgb(1,0,0)#red
-                return
-            elif key_data.keystate and key_data.keycode == 'KEY_BACKSPACE': 
-                print('erase routine***************')
-                msglen = len(keyboard_input) #// 2
-                #text = 'abcdefg'
-                #text = text[:1] + 'Z' + text[2:]
-                keyboard_input = keyboard_input[:msglen-1]
-                print('size of msg: ' , msglen)
-                print ("recorted msg: " + keyboard_input)
+                if key_data.keystate and key_data.keycode == 'KEY_1':
+                    print('toggle')
+                    #toggle_led()
+                    blink_rgb(0,0,1)#blue
+                elif key_data.keystate and key_data.keycode == 'KEY_ESC': 
+                    print('I get out of here!')
+                    show_screen("Leaving..")
+                    blink_rgb(1,0,0)#red
+                    return
+                elif key_data.keystate and key_data.keycode == 'KEY_BACKSPACE': 
+                    print('erase routine***************')
+                    msglen = len(keyboard_input) #// 2
+                    #text = 'abcdefg'
+                    #text = text[:1] + 'Z' + text[2:]
+                    keyboard_input = keyboard_input[:msglen-1]
+                    print('size of msg: ' , msglen)
+                    print ("recorted msg: " + keyboard_input)
+                    
+                elif key_data.keystate and key_data.keycode == 'KEY_SPACE': 
+                    
+                    keyboard_input = keyboard_input + ' '
+                    
+                elif key_data.keystate:
+                    print('----------------key state--------------------')
+                    m = re.search('(?<=_)\w+', key_data.keycode)
+                    if  m:
+                        found = m.group(0)
+                        print(found)
+                        keyboard_input = keyboard_input + found
+                        #pass 
+                status = "Texting..."
+                #print("writting to screen")        
+                show_screen(status)
+                time.sleep(500.0 / 1000.0) #'test' 
+
+        #print("made it here------")
+    print("out of the key_read_loop------") 
                 
-            elif key_data.keystate and key_data.keycode == 'KEY_SPACE': 
-                
-                keyboard_input = keyboard_input + ' '
-                   
-                
-            elif key_data.keystate:
-                print('------------------------------------')
-                m = re.search('(?<=_)\w+', key_data.keycode)
-                if  m:
-                    found = m.group(0)
-                    print(found)
-                    keyboard_input = keyboard_input + found
-                    #pass 
-            status = "Texting..."        
-            show_screen(status)    
-                
-def Interrupt_Start(channel):
+def Interrupt_Start(channel): #Yellow button Pressed -->send word....engrave!
   global Counter
   global prev_inp1
   inp = GPIO.input(switch_start)
 
-  if (not inp): #prev_inp1 == 1
-     # Counter um eins erhoehen und ausgeben
-     #Counter = Counter + 1
-     #print ("Counter: " + str(Counter))
+  if (not inp):
+     show_screen("Sending...")
      show_screen("Sending...")
      talker() 
-     #blink(LED_GREEN)
-     blink_rgb(1, 1, 0) #r,g,b
+     blink_rgb(1, 1, 0) #r,g,b Yellow
      prev_inp1 = 0
 
-def Interrupt_Clear(channel):
+def Interrupt_Clear(channel):  #Blue button Pressed--> clear Screen and Text and let me start again!
   global Counter
+  global keyboard_input
+  print ("BLUE button printed..." )
   inp = GPIO.input(switch_clear)
 
   if (not inp): #prev_inp1 == 1
      # Counter um eins erhoehen und ausgeben
      Counter = 0
      display = drivers.Lcd()
-     show_screen("Clear...")
-     show_screen("Clear...")
      print ("Clear..." ) 
-     blink_rgb(1 , 0, 1) #r,g,b
+     blink_rgb(0 , 0, 1) #r,g,b 
+     keyboard_input = ""
+     show_screen("Clear...")
+     show_screen("Clear...")
+     wrong_div = 24/(8-8)
+     
+     
          
-def Interrupt_Stop(channel):
+def Interrupt_Stop(channel): #Red button Pressed--> restart the machine!
   
   inp = GPIO.input(switch_stop)
 
   if (not inp): #prev_inp1 == 1
      # Counter um eins erhoehen und ausgeben
      show_screen("STOP...")
+     show_screen("STOP...")
      blink_rgb(1 , 0, 0) #r,g,b
      # Command to execute
      os.system("sudo systemctl restart cnc.service")
      #os.system("sudo reboot")
      blink_rgb(1 , 1, 1) #r,g,b
+     print(os.getpid())
+
      #++os.system("sudo bash /home/tamer/ros_catkin_ws/src/CNC_marker/src/stop_start.sh >>erase.txt")
-          
-          
-def blink(led_pin):
-    
-    for i in range(3):
-        GPIO.output(led_pin, GPIO.LOW)
-        time.sleep(0.08)
-        GPIO.output(led_pin, GPIO.HIGH)
-        time.sleep(0.08)
 
 def blink_rgb(r , g , b):
-    print('Color wipe animations.')
+    #print('Color wipe animations.')
     #colorWipe(strip, Color(255, 0, 0))  # Red wipe
     #colorWipe(strip, Color(0, 255, 0))  # Green wipe
     #colorWipe(strip, Color(0, 0, 255))  # Blue wipe
@@ -234,7 +242,6 @@ def blink_rgb(r , g , b):
         time.sleep(0.08)
 
 def start_topic():
-    #global topic_init
     global keyboard_input
     
     keyboard_input = "init"
@@ -243,31 +250,40 @@ def start_topic():
         talker()
         time.sleep(0.2)
         
-    keyboard_input = ""                 
-    show_screen("Sending...")
+    keyboard_input = ""   
 
-GPIO.add_event_detect(switch_start, GPIO.RISING, callback = Interrupt_Start, bouncetime = 250)  
-GPIO.add_event_detect(switch_stop, GPIO.RISING, callback = Interrupt_Stop, bouncetime = 250) 
-GPIO.add_event_detect(switch_clear, GPIO.RISING, callback = Interrupt_Clear, bouncetime = 250) 
+def except_hook(type, value, tback):
+    # manage unhandled exception here
+    print("unmanaged exeception**************") 
+    os.sys.__excepthook__(type, value, tback) # then call the default handler
+
+def myhook():
+    print ("Shutdown time!")
+            
+
+GPIO.add_event_detect(switch_start, GPIO.FALLING, callback = Interrupt_Start, bouncetime = 250)  
+GPIO.add_event_detect(switch_stop, GPIO.FALLING, callback = Interrupt_Stop, bouncetime = 250) 
+GPIO.add_event_detect(switch_clear, GPIO.FALLING, callback = Interrupt_Clear, bouncetime = 250) 
+
+os.sys.excepthook = except_hook
         
 if __name__ == '__main__':
     try:
-       print("was du labberst!!??")
-       strip.begin() # init the led
+       print("Executing main")
+       strip.begin() # init the RGB-led
        show_screen(status)
        blink_rgb(0,1,0)#rgb
-       blink_rgb(0,1,0)
        listener()
        start_topic()
-       helper(dev)
+       keyboard_read_helper(dev)
     except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
        print("Keyboard interrupt")   
     except rospy.ROSInterruptException:
         pass
+        print("MIO rospi error some error")
     except:
        print("some error") 
     finally:
        print("clean up") 
        GPIO.cleanup() # cleanup all GPIO
        display.lcd_clear()
-

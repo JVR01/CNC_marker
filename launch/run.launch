@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<launch>
+    
+    <arg name="ARG1"  default="/home/toby001/catkin_ws/src/cnc_marker/src/Characters/ /home/toby001/catkin_ws/src/cnc_marker/" />
+    <arg name="ARG2"  default="-p /dev/ttyUSB0 -f /home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc" />
+    
+    <arg name="RPI1"  default="~/catkin_ws/src/CNC_marker/src/Characters/ ~/catkin_ws/src/CNC_marker/" />
+    <arg name="RPI2"  default="-p /dev/ttyUSB0 -f /home/jvr/catkin_ws/src/CNC_marker/OutputFile.ngc" />
+                               
+    <node pkg="cnc_marker" type="manager.py"      name="manager" />
+    <node pkg="cnc_marker" type="GcodeGenerator"  name="GcodeGenerator" args="$(arg RPI1)" />
+    <node pkg="cnc_marker" type="gCodeSender.py"  name="gCodeSender"  launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen"  args= "$(arg RPI2)"/>
+    <node pkg="cnc_marker" type="KeyboarInput.py" name="KeyboarInput" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" />
+    
+</launch>

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import serial
 import time
@@ -88,6 +88,7 @@ def listener():
 
     rospy.Subscriber("gcode_status", String, callback)
 
+    #SeccondPortTried = False
 
     try:
         rospy.loginfo("-----------------Starting_Sender----------------")
@@ -107,10 +108,16 @@ def listener():
         rospy.loginfo("-----------------Sender test worked----------------")
     except:
         rospy.loginfo("-----------------Exeption----------------")
-        print("An exception occurred, could not Conect ")
+        print("An exception occurred, could not Conect to:" + args.port)
         print("try Tomorrow ....")
-        time.sleep(1) 
-        sys.exit(1) 
+
+        if args.port == "/dev/ttyUSB0":
+           args.port = "/dev/ttyUSB1"
+           print("trying to conecct to secondary port:" + args.port)
+           listener()
+        else:
+           time.sleep(1) 
+           sys.exit(1)    
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
