@@ -85,7 +85,9 @@ ROS_INFO("%s", "hallooooooooooooo");
                 int number_of_lines = 0;
                 if (text_file.is_open()) {
                         std::string line;
-                    
+                        std::cout << "++++++++File opened for char: "<< character_str<< std::endl;
+
+
                         while (std::getline(text_file, line)) {
                             number_of_lines++;
 
@@ -94,7 +96,10 @@ ROS_INFO("%s", "hallooooooooooooo");
                               output_file << line << std::endl;
                               std::cout << line << std::endl;
                             }
-                            else{result = 1001;}
+                            else
+                            {
+                                result = 1001;
+                            }
                             
                         }
                         //--output_file << "" << std::endl;
@@ -103,6 +108,7 @@ ROS_INFO("%s", "hallooooooooooooo");
                 }
                 else
                 {
+                    std::cout << "xxxxxx--File NOT opened for char: "<< character_str<< std::endl;
                     throw (character_str);
                 }
             } catch (const std::overflow_error& e) {
@@ -116,8 +122,9 @@ ROS_INFO("%s", "hallooooooooooooo");
                 std::cout <<"logic_error " << std::endl;
             } 
             catch (std::string const & word) {
-               result = 1;    
-               std::cout << "Error -> Character not found on the list" << std::endl;;
+               result = 1;
+               std::cout << "Error -> UNIMPLEMENTED EXEPTION" << std::endl;
+               std::cout << "Error -> Character not found on the list" << std::endl;
                std::cout << "The faulty character is: " << word << std::endl;
             }
 

@@ -70,6 +70,10 @@ void pubstatus(std::string msg_str)
 
 void generate_code(std::string const & message)
 {
+  std::cout << ">char_path: " << char_path << std::endl;
+  std::cout << ">Out_Path: " << Out_Path << std::endl;
+  std::cout << " "  << std::endl;
+
   GcodeParser GCode(char_path, Out_Path);
   GCode.add_start_code();
   //int U = GCode.add_character("A");
@@ -83,14 +87,15 @@ void generate_code(std::string const & message)
   fs << "result U: " << U << std::endl;
   fs << "char_Path:" << GCode.getCharPath()<< std::endl;
 
-  for (int i = 0; i <= 100; i++)
+  /*for (int i = 0; i <= 100; i++)
   {
 
     std::stringstream ss;
     ss << "working " << i;
     //std::string words =  "working "+ i;
     ROS_INFO("%s", ss.str().c_str()); //status.data.c_str()
-  }
+  }*/
+  
   //fs << "Test number: " << ss.str() << std::endl;
   fs << "Test number: " << message << std::endl;
   std::string  msg = "gcode_ready";
@@ -109,15 +114,18 @@ void chatterCallback(const std_msgs::String::ConstPtr &msg)
 {
   ++count;
   ROS_INFO("GcodeGenerator heard: [%s]", msg->data.c_str());
+
+  std::cout << ">GcodeGenerator heard: " << msg->data.c_str() << std::endl;
   
   std::string message = msg->data;
   if (input_valid(message))
   {
+    pubstatus("Input valid");
     generate_code(message);
   }
   else
   {
-    pubstatus("wrong input");
+    pubstatus("Wrong input");
   }
   ros::Duration(1.0).sleep();
 }
@@ -175,7 +183,7 @@ int main(int argc, char **argv)
     std::stringstream ss;
     ss << "idleee " << count;
     status.data = ss.str();
-    ROS_INFO("%s", status.data.c_str());
+    //---->ROS_INFO("%s", status.data.c_str());
     //chatter_pub.publish(status);
     ros::spinOnce();
     loop_rate.sleep();

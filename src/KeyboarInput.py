@@ -66,7 +66,7 @@ print(dev.name)
 
 if (dev.name != "2.4G Composite Devic"):
     print("Defaul keyboard failed but trying alternative ...")
-    dev = InputDevice('/dev/input/event3')
+    dev = InputDevice('/dev/input/event1')                         #     ('/dev/input/event3'))      Does this always work? nooo! TODO
     print(dev)
     print(dev.name)
 
@@ -123,20 +123,17 @@ def keyboard_read_helper(dev):
     print('------------------keyboard_read_helper started------------------')
     for ev in dev.read_loop():
         
-        #if KeyboardInterrupt: #rospy.ROSInterruptException: #rospy.is_shutdown():
-         #   print('fiishing the keyRead loop!')
-          #  exit()
+        #print('...Into keyRead loop!')
         try:
             rosgraph.Master('/rostopic').getPid()
         except socket.error:
-            print('finishing the keyRead loop!')
+            print('Finishing the keyRead loop!')
             exit()
-            #raise ROSTopicIOException("Unable to communicate with master!")
-            
+             
 
         if ev.type == ecodes.EV_KEY:
             key_data= categorize(ev)
-            #print(key_data.keycode)
+            print(key_data.keycode)
 
             if key_data.keystate == key_data.key_down:
                 c = key_data.keycode
@@ -175,7 +172,7 @@ def keyboard_read_helper(dev):
                         keyboard_input = keyboard_input + found
                         #pass 
                 status = "Texting..."
-                #print("writting to screen")        
+                print("writting to screen")        
                 show_screen(status)
                 time.sleep(500.0 / 1000.0) #'test' 
 

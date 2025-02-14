@@ -28,7 +28,7 @@ print ("Gcode file: %s" % args.file )
 
                                                                                                                                                                                               
 def callback(data): #gcode_status  topic
-  rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
+  rospy.loginfo(rospy.get_caller_id() + "I heard:  %s", data.data)
 
   if data.data == 'gcode_ready': #gcode_ready
       s = serial.Serial(args.port,115200)
