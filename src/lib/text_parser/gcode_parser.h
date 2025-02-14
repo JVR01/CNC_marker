@@ -109,7 +109,8 @@ ROS_INFO("%s", "hallooooooooooooo");
                 else
                 {
                     std::cout << "xxxxxx--File NOT opened for char: "<< character_str<< std::endl;
-                    throw (character_str);
+                    std::cout << "char path was this: "<< char_path << std::endl;
+                    throw (character_str);//without this it wont through the number of wrong chars
                 }
             } catch (const std::overflow_error& e) {
                 // this executes if f() throws std::overflow_error (same type rule)

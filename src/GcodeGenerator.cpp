@@ -87,6 +87,12 @@ void generate_code(std::string const & message)
   fs << "result U: " << U << std::endl;
   fs << "char_Path:" << GCode.getCharPath()<< std::endl;
 
+  std::cout << "Bad characters U: " << U << std::endl;
+  if(U>0U)
+  {
+    return;
+  }
+
   /*for (int i = 0; i <= 100; i++)
   {
 
