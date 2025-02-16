@@ -330,7 +330,13 @@ G04 P0.500 (END Y)
 ———character: Z ———-
 G00 M3 S90 (MAKE Z)
 G00 X0.133342 Y7.103960
-G01 M5 F100.
+G01 M5 F100.0 (Penetrate)
+G01 X5.465342 Y7.103960 F400.000000 (Top horizontal line)
+G01 X0.133342 Y0.103960 F400.000000 (Diagonal line down)
+G01 X5.465342 Y0.103960 F400.000000 (Bottom horizontal line)
+G00 M3 S90
+G04 P0.500 (END Z)
+
 
 ———character: 0 ———-
 G00 M3 S90 (MAKE 0)
