@@ -1,1 +1,56 @@
-hello
+#include <iostream>
+#include <fstream>
+#include <string>
+
+std::string getCharacterGcode(const std::string& character, const std::string& filePath) {
+    std::ifstream file(filePath); // Open the file
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open file at path " << filePath << std::endl;
+        return "";
+    }
+
+    std::string line;
+    std::string targetHeader = "———character: " + character + " ———-";
+    std::string gcode = "";
+    bool foundCharacter = false;
+
+    while (std::getline(file, line)) {
+        // Check if the current line is the header for the target character
+        if (line.find(targetHeader) != std::string::npos) {
+            foundCharacter = true;
+            continue; // Skip the header line
+        }
+
+        // If we've found the character, collect its G-code
+        if (foundCharacter) {
+            // Stop if we encounter the next character's header or end of file
+            if (line.find("———character:") != std::string::npos) {
+                break;
+            }
+            gcode += line + "\n"; // Append the line to the G-code string
+        }
+    }
+
+    file.close(); // Close the file
+
+    if (!foundCharacter) {
+        std::cerr << "Error: Character '" << character << "' not found in the file." << std::endl;
+        return "";
+    }
+
+    return gcode;
+}
+
+int main() {
+    std::string character = "A"; // Example: Get G-code for character 'A'
+    std::string filePath = "characters.txt"; // Path to the file containing all characters
+
+    std::string gcode = getCharacterGcode(character, filePath);
+
+    if (!gcode.empty()) {
+        std::cout << "G-code for character " << character << ":\n";
+        std::cout << gcode;
+    }
+
+    return 0;
+}
