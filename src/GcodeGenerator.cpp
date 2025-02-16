@@ -17,7 +17,7 @@ ros::Publisher chatter_pub;
 int count = 0;
 std_msgs::String status;
 std::ofstream fs("src/cnc_marker/src/GcodeText.txt"); //writes out the results
-char valid_chars[] = { 'A', 'B', 'C'  }; //'\0'
+char valid_chars[] = { 'A', 'B', 'C', 'M' , 'R' }; //'\0'
 bool validate_next = true;
 CSVRow roww;
 
@@ -82,7 +82,7 @@ void generate_code(std::string const & message)
   //U = GCode.add_character("B");
   //U = GCode.add_character("C");
   int U = GCode.add_phrase(message);
-  //U = GCode.add_phrase("moquito");
+  
   //GCode.add_end_code();
   fs << "result U: " << U << std::endl;
   fs << "char_Path:" << GCode.getCharPath()<< std::endl;
@@ -90,7 +90,7 @@ void generate_code(std::string const & message)
   std::cout << "Bad characters U: " << U << std::endl;
   if(U>0U)
   {
-    return;
+    return; //so that it does not publish the msg with wron chars.
   }
 
   /*for (int i = 0; i <= 100; i++)

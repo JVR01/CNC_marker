@@ -132,24 +132,19 @@ ROS_INFO("%s", "hallooooooooooooo");
           return result;
 
         }
+
+
         int add_phrase(std::string const & phrase)
         {
             //int add_character(std::string const & character_str)
             int result = 0;
             std::string str = phrase;//("Test string");
 
-            /*for ( std::string::iterator it=str.begin(); it!=str.end(); ++it)
-            {
-               std::cout << *it <<"--";
-              
-            }
-            
-            std::cout << '\n';*/
-
             for (std::string::size_type i = 0; i < str.size(); i++) {
                 std::cout << str[i] << ' ';  
                 std::string s(1, str[i]);
                 result += add_character(s); // if faulty returns a 0
+
                 if(i <  str.size()-1 ){add_transition_code();}
             }
             add_end_code();
@@ -173,8 +168,9 @@ ROS_INFO("%s", "hallooooooooooooo");
         void add_end_code()
         {
           output_file << "G54 (First ofset)" << std::endl;
-          output_file << "M3  (Stop Spindle -- Go up servo)" << std::endl;
+          output_file << "M3 S120" << std::endl;//servo up to 120 degrees
           output_file << "G00 X0.0000 Y0.0000" << std::endl;
+          output_file << "M5  (Stop Spindle -- Go up servo)" << std::endl;
           output_file << "M2" << std::endl;
           output_file << "%" << std::endl;
           output_file.close();
@@ -186,13 +182,13 @@ ROS_INFO("%s", "hallooooooooooooo");
           output_file << "$X" << std::endl;
            
           //output_file << "%" << std::endl;
-          output_file << "M3" << std::endl;
+          //output_file << "M5" << std::endl;
           output_file << "G21 (All units in mm)" << std::endl;
           output_file << "G54 (First ofset)" << std::endl;
           output_file << "G1 F500" << std::endl;
-          output_file << "M5 S120" << std::endl;
-          output_file << "M3" << std::endl;
-          output_file << "$H" << std::endl; 
+          output_file << "M3 S120" << std::endl;//servo up to 120 degrees
+          output_file << "$H" << std::endl;
+          output_file << "M3 S120" << std::endl;//servo up to 120 degrees
           //--output_file << "" << std::endl;
         }
         
