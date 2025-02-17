@@ -17,7 +17,8 @@ ros::Publisher chatter_pub;
 int count = 0;
 std_msgs::String status;
 std::ofstream fs("src/cnc_marker/src/GcodeText.txt"); //writes out the results
-char valid_chars[] = { 'A', 'B', 'C', 'M' , 'R' }; //'\0'
+//'\0'
+char valid_chars[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 bool validate_next = true;
 CSVRow roww;
 
