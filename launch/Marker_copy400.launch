@@ -6,7 +6,7 @@
     <arg name="ARG2"  default="-p /dev/ttyUSB0 -f /home/toby001/catkin_ws/src/cnc_marker/OutputFile.ngc" />
     
     <arg name="RPI_1"  default="/home/jvr/catkin_ws/src/CNC_marker/src/Characters/ /home/jvr/catkin_ws/src/CNC_marker/" />
-    <arg name="RPI_2"  default="-p /dev/ttyUSB0 -f /home/jvr/catkin_ws/src/CNC_marker/OutputFile.ngc" />
+    <arg name="RPI_2"  default="-p /dev/ttyUSB1 -f /home/jvr/catkin_ws/src/CNC_marker/OutputFile.ngc" />
                                
     <node pkg="cnc_marker" type="manager.py"      name="manager" />
     <node pkg="cnc_marker" type="GcodeGenerator"  name="GcodeGenerator" output="screen" args="$(arg RPI_1)" />

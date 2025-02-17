@@ -140,7 +140,7 @@ class GcodeParser
 
           bool special_char = false;
           std::string::size_type posi = 0;
-          std::string special_chars = "<> .-+-*#";
+          std::string special_chars = "<>.-+-*#";
 
           if (  (posi = special_chars.find(character_str.c_str(), posi)  ) != std::string::npos)
           {
@@ -155,6 +155,12 @@ class GcodeParser
          
           try {
                 std::string current_cahr_code = getCharacterGcode(character_str, folder_path + "characters_Gcode.txt");
+
+
+                if(character_str == " ")
+                {
+                    current_cahr_code = getCharacterGcode("space", folder_path + "characters_Gcode.txt");
+                }
 
                 int number_of_lines = 0;
 
@@ -240,7 +246,7 @@ class GcodeParser
 
         void add_transition_code()
         {
-          output_file << "G00 X10.0000Y0.0000" << std::endl;
+          output_file << "G00 X8.000 Y0.0000" << std::endl;
           output_file << "G54" << std::endl;
           output_file << "G10 L20 P2 X0 Y0" << std::endl;
           output_file << "G55" << std::endl;
@@ -249,6 +255,8 @@ class GcodeParser
           //output_file << "G56" << std::endl;
           //output_file << "G10 L20 P3 X0 Y0" << std::endl;
         }
+
+        
         void add_end_code()
         {
           output_file << "G54 (First ofset)" << std::endl;
@@ -273,6 +281,7 @@ class GcodeParser
           output_file << "M3 S120" << std::endl;//servo up to 120 degrees
           output_file << "$H" << std::endl;
           output_file << "M3 S120" << std::endl;//servo up to 120 degrees
+          output_file << "G04 P0.500" << std::endl;
           //--output_file << "" << std::endl;
         }
 

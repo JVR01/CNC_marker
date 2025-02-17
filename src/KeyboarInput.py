@@ -141,7 +141,7 @@ def keyboard_read_helper(dev):
                 #print(categorize(ev))
                 #print(key_data)
                
-                if key_data.keystate and key_data.keycode == 'KEY_1':
+                if key_data.keystate and key_data.keycode == 'KEY_F1':
                     print('toggle')
                     #toggle_led()
                     blink_rgb(0,0,1)#blue
