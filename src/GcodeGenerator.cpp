@@ -17,7 +17,7 @@ ros::Publisher chatter_pub;
 int count = 0;
 std_msgs::String status;
 std::ofstream fs("src/cnc_marker/src/GcodeText.txt"); //writes out the results
-char valid_chars[] = { 'A', 'B', 'C', 'M' , 'R' }; //'\0'
+char valid_chars[] = { 'A', 'B', 'C', 'M' , 'R', 'Z', '8'}; //'\0'
 bool validate_next = true;
 CSVRow roww;
 
@@ -35,6 +35,7 @@ bool input_valid(std::string const &message)
   int sizeOfArray = sizeof(valid_chars) / sizeof(valid_chars[0]);
   
   std::string validcharacters(valid_chars);
+
   for ( std::string::iterator it=Message.begin(); it!=Message.end(); ++it)
   {
      //std::cout << *it;
@@ -45,7 +46,11 @@ bool input_valid(std::string const &message)
      if( validcharacters.find(character) != std::string::npos )
        {on_thelist = true;}
      else
-       {on_thelist= false;valid=false;} 
+       {
+         on_thelist= false;
+         valid=false;
+         ROS_INFO("Invalid character: %s\n", character.c_str());
+       } 
   }
    //s1.find(s2) != std::string::npos
    //if( (message.find("C") != std::string::npos) | ( message.find("D")!= std::string::npos)  ){valid = true;}

@@ -70,41 +70,42 @@ class GcodeParser
           std::string::size_type posi = 0;
           std::string special_chars = "<> .-+-*#";
 
-          if (  (posi = special_chars.find(character_str.c_str(), posi)  ) != std::string::npos) //(posi = character_str.find(';', posi)  ) != std::string::npos
+          if (  (posi = special_chars.find(character_str.c_str(), posi)  ) != std::string::npos)
           {
               special_char = true;
               std::cout << "++++++++Special character ++++++++++" << std::endl;
           }
-#if  ROS_MELODIC
-ROS_INFO("%s", "hallooooooooooooo");
-#endif
-            
+
+            #if  ROS_MELODIC
+            ROS_INFO("%s", "Hello fro ROS melodic");
+            #endif
+         
           try {
                 std::string char_path = folder_path + character_str + ".ngc";
                 std::ifstream text_file(char_path.c_str());
                 int number_of_lines = 0;
-                if (text_file.is_open()) {
-                        std::string line;
-                        std::cout << "++++++++File opened for char: "<< character_str<< std::endl;
+                if (text_file.is_open()) 
+                {
+                    std::string line;
+                    std::cout << "++++++++File opened for char: "<< character_str<< std::endl;
 
+                    while (std::getline(text_file, line)) {
+                        number_of_lines++;
 
-                        while (std::getline(text_file, line)) {
-                            number_of_lines++;
-
-                            if (output_file.is_open()) 
-                            {
-                              output_file << line << std::endl;
-                              std::cout << line << std::endl;
-                            }
-                            else
-                            {
-                                result = 1001;
-                            }
-                            
+                        if (output_file.is_open()) 
+                        {
+                            output_file << line << std::endl;
+                            std::cout << line << std::endl;
                         }
-                        //--output_file << "" << std::endl;
-                        text_file.close();
-                        //-->std::cout <<"Number of lines Found: "<< number_of_lines << std::endl;
+                        else
+                        {
+                            result = 1001;
+                        }
+                        
+                    }
+                    //--output_file << "" << std::endl;
+                    text_file.close();
+                    //-->std::cout <<"Number of lines Found: "<< number_of_lines << std::endl;
                 }
                 else
                 {
@@ -133,6 +134,83 @@ ROS_INFO("%s", "hallooooooooooooo");
 
         }
 
+        int add_character_2(std::string const & character_str)
+        {
+          int result = 0;
+
+          bool special_char = false;
+          std::string::size_type posi = 0;
+          std::string special_chars = "<> .-+-*#";
+
+          if (  (posi = special_chars.find(character_str.c_str(), posi)  ) != std::string::npos)
+          {
+            special_char = true;
+            std::cout << "++++++++Special character ++++++++++" << std::endl;
+            return 1; //character wont be found, just return ToDo
+          }
+
+        #if  ROS_MELODIC
+        ROS_INFO("%s", "Hello fro ROS melodic");
+        #endif
+         
+          try {
+                std::string current_cahr_code = getCharacterGcode(character_str, folder_path + "characters_Gcode.txt");
+
+                int number_of_lines = 0;
+
+                if (current_cahr_code!="") 
+                {
+                    std::cout << "++++++++Trying to add char: "<< character_str<< std::endl;
+
+                    std::istringstream f(current_cahr_code);
+                    std::string line;    
+                    while (std::getline(f, line)) 
+                    {
+                        std::cout <<"found line: "<< line << std::endl;
+
+                        number_of_lines++;
+
+                        if (output_file.is_open()) 
+                        {
+                            output_file << line << std::endl;
+                            std::cout << "Adding line to Output: "<<line << std::endl;
+                        }
+                        else
+                        {
+                            std::cout << "xxxxxx--Output file was not open: "<< character_str<< std::endl;
+                            result = 1001;
+                        }
+                    }
+
+                    //-->std::cout <<"Number of lines Found: "<< number_of_lines << std::endl;
+                }
+                else
+                {
+                    std::cout << "xxxxxx--Could not find char: "<< character_str<< std::endl;
+                    std::cout << "chars Gcode path was this: "<< folder_path + "characters_Gcode.txt" << std::endl;
+                    throw (character_str);//without this it wont through the number of wrong chars
+                }
+
+            } catch (const std::overflow_error& e) {
+                // this executes if f() throws std::overflow_error (same type rule)
+                std::cout <<"overflow_error " << std::endl;
+            } catch (const std::runtime_error& e) {
+                // this executes if f() throws std::underflow_error (base class rule)
+                std::cout <<"underflow_error " << std::endl;
+            } catch (const std::exception& e) {
+                // this executes if f() throws std::logic_error (base class rule)
+                std::cout <<"logic_error " << std::endl;
+            } 
+            catch (std::string const & word) {
+               result = 1;
+               std::cout << "Error -> UNIMPLEMENTED EXEPTION" << std::endl;
+               std::cout << "The faulty character is: " << word << std::endl;
+            }
+
+          return result;
+
+        }
+
 
         int add_phrase(std::string const & phrase)
         {
@@ -143,11 +221,17 @@ ROS_INFO("%s", "hallooooooooooooo");
             for (std::string::size_type i = 0; i < str.size(); i++) {
                 std::cout << str[i] << ' ';  
                 std::string s(1, str[i]);
-                result += add_character(s); // if faulty returns a 0
+                //result += add_character(s); // if faulty returns a 0
+                result += add_character_2(s); // if faulty returns a 0
 
-                if(i <  str.size()-1 ){add_transition_code();}
+                if(i <  str.size()-1 )//if more than one char
+                {
+                    add_transition_code();
+                }
             }
+
             add_end_code();
+
             std::cout <<"faulty Characters -> "<< result <<" / "<< str.size() << std::endl;
 
             return result;
@@ -190,6 +274,48 @@ ROS_INFO("%s", "hallooooooooooooo");
           output_file << "$H" << std::endl;
           output_file << "M3 S120" << std::endl;//servo up to 120 degrees
           //--output_file << "" << std::endl;
+        }
+
+
+        std::string getCharacterGcode(const std::string& character, const std::string& filePath) 
+        {
+            std::ifstream file(filePath); // Open the file
+            if (!file.is_open()) {
+                std::cerr << "Error: Could not open file at path " << filePath << std::endl;
+                return "";
+            }
+
+            std::string line;
+            std::string targetHeader = "———character: " + character + " ———-";
+            std::string gcode = "";
+            bool foundCharacter = false;
+
+            while (std::getline(file, line)) 
+            {
+                // Check if the current line is the header for the target character
+                if (line.find(targetHeader) != std::string::npos) {
+                    foundCharacter = true;
+                    continue; // Skip the header line
+                }
+
+                // If we've found the character, collect its G-code
+                if (foundCharacter) {
+                    // Stop if we encounter the next character's header or end of file
+                    if (line.find("———character:") != std::string::npos) {
+                        break;
+                    }
+                    gcode += line + "\n"; // Append the line to the G-code string
+                }
+            }
+
+            file.close(); // Close the file
+
+            if (!foundCharacter) {
+                std::cerr << "Error: Character '" << character << "' not found in the file." << std::endl;
+                return "";
+            }
+
+            return gcode;
         }
         
     private:
