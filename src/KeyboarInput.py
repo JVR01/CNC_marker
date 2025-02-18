@@ -7,8 +7,12 @@ the given text ist Published throgh the topic: 'Keyboard_Input'
 '''
 from turtle import delay
 import rospy
+import rosnode
 import re
 import os
+import sys
+import threading
+
 import drivers
 from time import sleep
 #>>>>>import commands
@@ -71,6 +75,19 @@ if (dev.name != "2.4G Composite Devic"):
     print(dev.name)
 
 
+def myhook():
+  rospy.loginfo("shutdown time!")  
+  a = threading.active_count()
+  rospy.loginfo(a)
+  rospy.loginfo("there you go")
+  #threading.keyboard_thread._stop_event.set() 
+  os.system("\r\n") 
+  sys.exit()
+  sys.exit(1)
+
+rospy.on_shutdown(myhook)
+
+
 def callback_status(data): #"status" topic
     global Counter
     global status
@@ -80,7 +97,7 @@ def callback_status(data): #"status" topic
     print ("Counter: " + str(Counter))
     #show_screen(status + ":" + str(Counter)) 
     show_screen(status) 
-    
+
     
 def listener():
     rospy.init_node('raspi_node', anonymous=True)
@@ -125,11 +142,20 @@ def keyboard_read_helper(dev):
         
         #print('...Into keyRead loop!')
         try:
-            rosgraph.Master('/rostopic').getPid()
+            rosgraph.Master('/rostopic').getPid() #'/KeyboarInput' #'/rostopic'
         except socket.error:
             print('Finishing the keyRead loop!')
             exit()
-             
+        
+        #try:
+            # Ping the node to check if it's running
+        #    rosnode.rosnode_ping('/KeyboarInput', max_count=1)
+        
+        #except rosnode.ROSNodeIOException:
+            #return False
+         #   print('Finishing the keyRead loop!')
+          #  exit()  
+
 
         if ev.type == ecodes.EV_KEY:
             key_data= categorize(ev)
@@ -178,7 +204,8 @@ def keyboard_read_helper(dev):
 
         #print("made it here------")
     print("out of the key_read_loop------") 
-                
+
+
 def Interrupt_Start(channel): #Yellow button Pressed -->send word....engrave!
   global Counter
   global prev_inp1
@@ -190,6 +217,7 @@ def Interrupt_Start(channel): #Yellow button Pressed -->send word....engrave!
      talker() 
      blink_rgb(1, 1, 0) #r,g,b Yellow
      prev_inp1 = 0
+
 
 def Interrupt_Clear(channel):  #Blue button Pressed--> clear Screen and Text and let me start again!
   global Counter
@@ -207,8 +235,7 @@ def Interrupt_Clear(channel):  #Blue button Pressed--> clear Screen and Text and
      show_screen("Clear...")
      show_screen("Clear...")
      wrong_div = 24/(8-8)
-     
-     
+         
          
 def Interrupt_Stop(channel): #Red button Pressed--> restart the machine!
   
@@ -253,9 +280,6 @@ def except_hook(type, value, tback):
     # manage unhandled exception here
     print("unmanaged exeception**************") 
     os.sys.__excepthook__(type, value, tback) # then call the default handler
-
-def myhook():
-    print ("Shutdown time!")
             
 
 GPIO.add_event_detect(switch_start, GPIO.FALLING, callback = Interrupt_Start, bouncetime = 250)  

@@ -175,14 +175,14 @@ class GcodeParser
                     std::string line;    
                     while (std::getline(f, line)) 
                     {
-                        std::cout <<"found line: "<< line << std::endl;
+                        //std::cout <<"found line: "<< line << std::endl;
 
                         number_of_lines++;
 
                         if (output_file.is_open()) 
                         {
                             output_file << line << std::endl;
-                            std::cout << "Adding line to Output: "<<line << std::endl;
+                            //std::cout << "Adding line to Output: "<<line << std::endl;
                         }
                         else
                         {
@@ -227,21 +227,59 @@ class GcodeParser
             int result = 0;
             std::string str = phrase;//("Test string");
 
+
+            uint8_t raws_number = str.size() / MAX_ROW_LENGTH_BIG; //12/7 = 1
+            uint8_t residual_raw_number = str.size() % MAX_ROW_LENGTH_BIG; //12/7--> 5
+            raws_number = (residual_raw_number>0) ? raws_number++ : raws_number;
+
+            std::cout<< "Doing so many raws: "<< raws_number<< std::endl;
+
+            
+            for(uint8_t r = 0U; r < raws_number; r++)
+            {
+                add_transition_code_vertical_up(); //start n rows up, so that it keeps writing down
+            }
+            
+            uint8_t drawn_chars_count = 0U;
+            bool down_trans_recent = false;
+
             for (std::string::size_type i = 0; i < str.size(); i++) {
                 std::cout << str[i] << ' ';  
                 std::string s(1, str[i]);
+
+                //6>5
+                //5>5
+                
+                /*if(drawn_chars_count > MAX_ROW_LENGTH_BIG-1)// i will get to i=10 then shoud do this from i=6 on
+                {
+                    add_transition_code_vertical_down();
+                    drawn_chars_count = 0U;
+                    down_trans_recent = true;
+                }*/
+                
                 //result += add_character(s); // if faulty returns a 0
                 result += add_character_2(s); // if faulty returns a 0
 
-                if(i <  str.size()-1 )//if more than one char
+                //&& (!down_trans_recent) 
+                //&& (drawn_chars_count == MAX_ROW_LENGTH_BIG-1)
+                //(drawn_chars_count + 1 != MAX_ROW_LENGTH_BIG-1) 
+                if((i <  str.size()-1) ) // Dont do if vert_down added  
                 {
-                    add_transition_code();
+                    if(drawn_chars_count >= MAX_ROW_LENGTH_BIG-1)// i will get to i=10 then shoud do this from i=6 on
+                    {
+                        add_transition_code_vertical_down();
+                        drawn_chars_count = 0U;
+                        down_trans_recent = true;
+                    }
+                    else
+                    {
+                        add_transition_code();
+                        //down_trans_recent = false;//reset flag
+                    }  
                 }
 
-                if(i >= MAX_ROW_LENGTH_BIG-1)// i will get to i=10 then shoud do this from i=6 on
-                {
-                    add_transition_code_vertical();
-                }
+
+                drawn_chars_count++;
             }
 
             add_end_code();
@@ -254,26 +292,28 @@ class GcodeParser
 
         void add_transition_code()
         {
+          output_file << "(TRANS_RIGHT)" << std::endl;
           output_file << "G00 X8.000 Y0.0000" << std::endl;
           output_file << "G54" << std::endl;
           output_file << "G10 L20 P2 X0 Y0" << std::endl;
           output_file << "G55" << std::endl;
-          //--output_file << "" << std::endl;
-          //output_file << "G00 X20.0000Y0.0000" << std::endl;
-          //output_file << "G56" << std::endl;
-          //output_file << "G10 L20 P3 X0 Y0" << std::endl;
         }
 
-        void add_transition_code_vertical()
+        void add_transition_code_vertical_up()
         {
           output_file << "G00 X0.000 Y8.000" << std::endl;
           output_file << "G54" << std::endl;
           output_file << "G10 L20 P2 X0 Y0" << std::endl;
           output_file << "G55" << std::endl;
-          //--output_file << "" << std::endl;
-          //output_file << "G00 X20.0000Y0.0000" << std::endl;
-          //output_file << "G56" << std::endl;
-          //output_file << "G10 L20 P3 X0 Y0" << std::endl;
+        }
+
+        void add_transition_code_vertical_down()
+        {
+          output_file << "(TRANS_DOWN)" << std::endl; //8*6 = 48
+          output_file << "G00 X-40.000 Y-8.000" << std::endl; //8*6 = 48
+          output_file << "G54" << std::endl;
+          output_file << "G10 L20 P2 X0 Y0" << std::endl;
+          output_file << "G55" << std::endl;
         }
 
 
@@ -282,7 +322,7 @@ class GcodeParser
           output_file << "G54 (First ofset)" << std::endl;
           output_file << "M3 S120" << std::endl;//servo up to 120 degrees
           output_file << "G00 X0.0000 Y0.0000" << std::endl;
-          output_file << "M5  (Stop Spindle -- Go up servo)" << std::endl;
+          //output_file << "M5  (Stop Spindle -- Go up servo)" << std::endl;
           output_file << "M2" << std::endl;
           output_file << "%" << std::endl;
           output_file.close();
@@ -299,6 +339,7 @@ class GcodeParser
           output_file << "G54 (First ofset)" << std::endl;
           output_file << "G1 F500" << std::endl;
           output_file << "M3 S120" << std::endl;//servo up to 120 degrees
+          output_file << "G04 P0.500" << std::endl;
           output_file << "$H" << std::endl;
           output_file << "M3 S120" << std::endl;//servo up to 120 degrees
           output_file << "G04 P0.500" << std::endl;
