@@ -54,3 +54,82 @@ int main() {
 
     return 0;
 }
+
+
+
+#!/usr/bin/env python
+
+import rospy
+import rosnode
+
+def is_node_running(node_name):
+    try:
+        # Ping the node to check if it's running
+        rosnode.rosnode_ping(node_name, max_count=1)
+        return True
+    except rosnode.ROSNodeIOException:
+        return False
+
+if __name__ == "__main__":
+    rospy.init_node("node_checker")
+    node_name = "/your_node_name"  # Replace with the name of the node you want to check
+
+    if is_node_running(node_name):
+        rospy.loginfo(f"Node {node_name} is running.")
+    else:
+        rospy.loginfo(f"Node {node_name} is NOT running.")
+
+
+
+
+
+#!/usr/bin/env python
+
+import rospy
+
+def is_node_running(node_name):
+    # Get the list of published topics and their publishers
+    topics = rospy.get_published_topics()
+
+    # Check if any topic is published by the node
+    for topic, publishers in topics:
+        if node_name in publishers:
+            return True
+    return False
+
+if __name__ == "__main__":
+    rospy.init_node("node_checker")
+    node_name = "/your_node_name"  # Replace with the name of the node you want to check
+
+    if is_node_running(node_name):
+        rospy.loginfo(f"Node {node_name} is running.")
+    else:
+        rospy.loginfo(f"Node {node_name} is NOT running.")
+
+
+
+
+
+def scale_gcode(input_file, output_file, scale_factor):
+    with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
+        for line in infile:
+            if 'X' in line or 'Y' in line:
+                # Extract X and Y coordinates
+                parts = line.split()
+                new_parts = []
+                for part in parts:
+                    if part.startswith('X'):
+                        x = float(part[1:]) * scale_factor
+                        new_parts.append(f'X{x:.6f}')
+                    elif part.startswith('Y'):
+                        y = float(part[1:]) * scale_factor
+                        new_parts.append(f'Y{y:.6f}')
+                    else:
+                        new_parts.append(part)
+                outfile.write(' '.join(new_parts) + '\n')
+            else:
+                outfile.write(line)
+
+# Example usage
+scale_gcode('original.gcode', 'scaled.gcode', 2)
+
