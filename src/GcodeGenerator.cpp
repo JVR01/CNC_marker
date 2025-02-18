@@ -21,6 +21,9 @@ std::ofstream fs("src/cnc_marker/src/GcodeText.txt"); //writes out the results
 char valid_chars[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
    'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' '};
+
+uint8_t MAX_RAW_SIZE_BIG_CHARS = 8U;
+
 bool validate_next = true;
 //CSVRow row;
 //std::string char_path = "/home/toby001/catkin_ws/src/cnc_marker/src/Characters/";
@@ -99,17 +102,7 @@ void generate_code(std::string const & message)
   {
     return; //so that it does not publish the msg with wron chars.
   }
-
-  /*for (int i = 0; i <= 100; i++)
-  {
-
-    std::stringstream ss;
-    ss << "working " << i;
-    //std::string words =  "working "+ i;
-    ROS_INFO("%s", ss.str().c_str()); //status.data.c_str()
-  }*/
   
-  //fs << "Test number: " << ss.str() << std::endl;
   fs << "Test number: " << message << std::endl;
   std::string  msg = "gcode_ready";
   //---->pubstatus(msg); //original comand

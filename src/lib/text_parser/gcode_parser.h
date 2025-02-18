@@ -25,6 +25,9 @@ class GcodeParser
     
         GcodeParser(std::string const &path, std::string const & OutPath);
         
+        int8_t MAX_ROW_LENGTH_BIG = 6U;
+
+
         std::string getCharPath()//std::string_view operator[](std::size_t index) const
         {
             return folder_path;
@@ -234,6 +237,11 @@ class GcodeParser
                 {
                     add_transition_code();
                 }
+
+                if(i >= MAX_ROW_LENGTH_BIG-1)// i will get to i=10 then shoud do this from i=6 on
+                {
+                    add_transition_code_vertical();
+                }
             }
 
             add_end_code();
@@ -256,7 +264,19 @@ class GcodeParser
           //output_file << "G10 L20 P3 X0 Y0" << std::endl;
         }
 
-        
+        void add_transition_code_vertical()
+        {
+          output_file << "G00 X0.000 Y8.000" << std::endl;
+          output_file << "G54" << std::endl;
+          output_file << "G10 L20 P2 X0 Y0" << std::endl;
+          output_file << "G55" << std::endl;
+          //--output_file << "" << std::endl;
+          //output_file << "G00 X20.0000Y0.0000" << std::endl;
+          //output_file << "G56" << std::endl;
+          //output_file << "G10 L20 P3 X0 Y0" << std::endl;
+        }
+
+
         void add_end_code()
         {
           output_file << "G54 (First ofset)" << std::endl;
