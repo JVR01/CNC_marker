@@ -1,5 +1,8 @@
+#!/usr/bin/env python3
 import serial
 import sys
+
+last_response = "ok"
 
 def send_gcode(device_path, gcode_file_path, nonstop=False):
     try:
@@ -20,8 +23,14 @@ def send_gcode(device_path, gcode_file_path, nonstop=False):
 
                 # Read and print the response from the device
                 response = ser.readline().decode().strip()
+                last_response = response
+
                 if response:
                     print(f"Response: {response}")
+                
+                #if  last_response != "ok":
+                 #   print(f"non quite ok Response: {last_response}")
+                  #  input("Not quite ok, press Enter to send the next line...")
 
                 # Wait for user input if not in nonstop mode
                 if not nonstop:
