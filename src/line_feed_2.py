@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import serial
 import sys
-
+#usage>> toby001@ubuntu:~/catkin_ws$ ./src/CNC_marker/src/line_feed_2.py /dev/ttyUSB0 /home/toby001/catkin_ws/src/CNC_marker/src/Characters/batman.gcode nonstop
 last_response = "ok"
 
 def send_gcode(device_path, gcode_file_path, nonstop=False):
