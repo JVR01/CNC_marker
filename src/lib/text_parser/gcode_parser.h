@@ -15,9 +15,12 @@
 #include <vector>
 #include <string>
 
-//--#include "appbaselib/export/base_types.h"
-
-//#include<string_view>
+enum class ErrorCode {
+    SUCCESS = 0,
+    OUTPUT_FILE_NOT_OPEN = 1001,
+    INPUT_FILE_NOT_OPEN = 1002,
+    UNKNOWN_ERROR = 1003
+};
 
 class GcodeParser
 {
@@ -37,10 +40,14 @@ class GcodeParser
         {
             return std::string(&m_line[m_data[index] + 1], m_data[index + 1] -  (m_data[index] + 1)); //return std::string_view(
         }
+
+
         std::size_t size() const
         {
             return m_data.size() - 1;
         }
+
+
         void readNextRow(std::istream& str)
         {
             std::getline(str, m_line);
@@ -289,6 +296,47 @@ class GcodeParser
             return result;
         }
 
+        
+        int add_special_symbol(const std::string& symbol_str) 
+        {
+            int result = static_cast<int>(ErrorCode::SUCCESS);
+
+            try 
+            {
+                // Construct the full path to the input file
+                std::string current_symbol_code = folder_path + symbol_str + ".gcode";
+                std::ifstream text_file(current_symbol_code);
+
+                if (!text_file.is_open()) {
+                    std::cerr << "Error: Could not open file for symbol: " << symbol_str << std::endl;
+                    return static_cast<int>(ErrorCode::INPUT_FILE_NOT_OPEN);
+                }
+
+                if (!output_file.is_open()) {
+                    std::cerr << "Error: Output file is not open." << std::endl;
+                    return static_cast<int>(ErrorCode::OUTPUT_FILE_NOT_OPEN);
+                }
+
+                std::string line;
+                std::cout << "Processing file for symbol: " << symbol_str << std::endl;
+
+                // Read the input file line by line and write to the output file
+                while (std::getline(text_file, line)) {
+                    output_file << line << std::endl;
+                    std::cout << line << std::endl;
+                }
+
+                text_file.close();
+            } 
+            catch (const std::exception& e) 
+            {
+                std::cerr << "Exception occurred: " << e.what() << std::endl;
+                result = static_cast<int>(ErrorCode::UNKNOWN_ERROR);
+            }
+
+            return result;
+        }
+
 
         void add_transition_code()
         {
@@ -327,6 +375,8 @@ class GcodeParser
           output_file << "%" << std::endl;
           output_file.close();
         }
+
+        
         void add_start_code()
         {
           output_file << "$X" << std::endl;
@@ -398,19 +448,6 @@ class GcodeParser
 
 std::istream& operator>>(std::istream& str, GcodeParser& data);
 bool Is_Lim_Inputttt(std::string var_name);
-/*
-
-int main()
-{
-    std::ifstream       file("plop.csv");
-
-    GcodeParser              row;
-    while(file >> row)
-    {
-        std::cout << "4th Element(" << row[3] << ")\n";
-    }
-}*/
-
 
 
 #endif /* LIMITER3_SRC_CSV_ROW_H_ */

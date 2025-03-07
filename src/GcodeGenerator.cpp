@@ -22,6 +22,8 @@ char valid_chars[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
    'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' '};
 
+std::string special_strs[] = {"BATMAN", "SMILE", "LOGO"};
+
 uint8_t MAX_RAW_SIZE_BIG_CHARS = 8U;
 
 bool validate_next = true;
@@ -62,6 +64,20 @@ bool input_valid(std::string const &message)
   
   ROS_INFO("%s", message.c_str());
   return valid; 
+}
+
+// Function to check if a string exists in the global array
+bool valid_special_string(const std::string& target) {
+    // Calculate the size of the array inside the function
+    int arraySize = sizeof(special_strs) / sizeof(special_strs[0]);
+
+    // Iterate through the array and check for the target string
+    for (int i = 0; i < arraySize; ++i) {
+        if (special_strs[i] == target) {
+            return true; // String found
+        }
+    }
+    return false; // String not found
 }
 
 void pubstatus(std::string msg_str)
@@ -105,6 +121,40 @@ void generate_code(std::string const & message)
   
   fs << "Test number: " << message << std::endl;
   std::string  msg = "gcode_ready";
+  
+  if (validate_next)
+  {
+    pubstatus(msg);
+  }
+  else
+  {
+    pubstatus("Bussy now");
+  }
+}
+
+
+void generate_code_special_str(std::string const & message)
+{
+  std::cout << "Special Code Generation"  << std::endl;
+
+
+  GcodeParser GCode(char_path, Out_Path);
+  //GCode.add_start_code();
+  
+  int U = GCode.add_special_symbol(message);//.add_phrase(message);
+  
+  //GCode.add_end_code();
+  fs << "result U: " << U << std::endl;
+  fs << "char_Path:" << GCode.getCharPath()<< std::endl;
+
+  std::cout << "Bad characters U: " << U << std::endl;
+  if(U>0U)
+  {
+    return; //so that it does not publish the msg with wrong chars.
+  }
+  
+  fs << "Test number: " << message << std::endl;
+  std::string  msg = "gcode_ready";
   //---->pubstatus(msg); //original comand
   if (validate_next)
   {
@@ -116,6 +166,7 @@ void generate_code(std::string const & message)
   }
 }
 
+
 void chatterCallback(const std_msgs::String::ConstPtr &msg)
 {
   ++count;
@@ -124,14 +175,22 @@ void chatterCallback(const std_msgs::String::ConstPtr &msg)
   std::cout << ">GcodeGenerator heard: " << msg->data.c_str() << std::endl;
   
   std::string message = msg->data;
-  if (input_valid(message))
+  if (input_valid(message) & !valid_special_string(message))
   {
     pubstatus("Input valid");
     generate_code(message);
   }
   else
-  {
-    pubstatus("Wrong input");
+  { //check if inside the list of special characters
+    if(valid_special_string(message))
+    {
+      pubstatus("Valid special string");
+      generate_code_special_str(message);
+    }
+    else
+    {
+      pubstatus("Wrong input");
+    }
   }
   ros::Duration(1.0).sleep();
 }
@@ -152,6 +211,8 @@ void Callback_Sender(const std_msgs::String::ConstPtr &msg)
     //pubstatus("Bussy now");
   }
 }
+
+
 
 
 int main(int argc, char **argv)

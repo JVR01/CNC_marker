@@ -9,7 +9,7 @@
     <node pkg="cnc_marker" type="manager.py"      name="manager" />
     <node pkg="cnc_marker" type="GcodeGenerator"  name="GcodeGenerator" output="screen" args="$(arg ARG1)$(arg ARG0)" />
     <!--node pkg="cnc_marker" type="gCodeSender.py"  name="gCodeSender"  launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen"  args= "$(arg ARG2)"/-->
-    <node pkg="cnc_marker" type="gCodeSender.py"  name="gCodeSender" output="screen"  args= "$(arg ARG2)"/>
+    <!--node pkg="cnc_marker" type="gCodeSender.py"  name="gCodeSender" output="screen"  args= "$(arg ARG2)"/-->
     <!--node pkg="cnc_marker" type="KeyboarInput.py" name="KeyboarInput" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" /-->
     
 </launch>
