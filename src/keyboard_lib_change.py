@@ -82,6 +82,26 @@ except Exception as e:
     chip.close()
     sys.exit(1)
 
+# Initialize keyboard device
+found = False
+for i in range(7):  # Check event0 through event6
+    try:
+        dev_path = f'/dev/input/event{i}'
+        dev = InputDevice(dev_path)
+        if dev.name == "2.4G Composite Devic":
+            found = True
+            break
+    except Exception as e:
+        print(f"Error checking {dev_path}: {e}")
+        continue
+
+if not found:
+    print("Keyboard initialization failed: Could not find '2.4G Composite Devic' in /dev/input/event0-6")
+    chip.close()
+    sys.exit(1)
+
+
+
 # Global variables
 display = drivers.Lcd()
 keyboard_input = ""
