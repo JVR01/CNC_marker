@@ -20,6 +20,9 @@ import subprocess
 from rpi_ws281x import PixelStrip, Color
 import time
 
+import rosgraph
+import socket
+
 # LED strip configuration:
 LED_COUNT = 1        # Number of LED pixels
 LED_PIN = 18         # GPIO pin connected to the pixels (18 uses PWM!)
@@ -72,15 +75,6 @@ except Exception as e:
     print(f"GPIO initialization failed: {e}")
     sys.exit(1)
 
-# Initialize keyboard device
-try:
-    dev = InputDevice('/dev/input/event0')
-    if dev.name != "2.4G Composite Devic":
-        dev = InputDevice('/dev/input/event1')
-except Exception as e:
-    print(f"Keyboard initialization failed: {e}")
-    chip.close()
-    sys.exit(1)
 
 # Initialize keyboard device
 found = False
@@ -90,6 +84,7 @@ for i in range(7):  # Check event0 through event6
         dev = InputDevice(dev_path)
         if dev.name == "2.4G Composite Devic":
             found = True
+            print(f"Keyboard devide--> Got it, found in  {dev_path}")
             break
     except Exception as e:
         print(f"Error checking {dev_path}: {e}")
@@ -110,7 +105,7 @@ Counter = 0
 prev_inp1 = 1
 
 def myhook():
-    rospy.loginfo("shutdown time!")  
+    rospy.loginfo("shutdown time from myhook() function!")  
     rospy.loginfo(f"Active threads: {threading.active_count()}")
     rospy.loginfo("there you go")
     os.system("\r\n") 
@@ -157,8 +152,8 @@ def keyboard_read_helper(dev):
     for event in dev.read_loop():
         try:
             rosgraph.Master('/rostopic').getPid()
-        except socket.error:
-            print('Finishing the keyRead loop!')
+        except Exception as inner_error:    #socket.error:
+            print(f"Finishing the keyRead loop, error event: {inner_error}")
             break
         
         if event.type == ecodes.EV_KEY:
